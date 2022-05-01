@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener2;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 

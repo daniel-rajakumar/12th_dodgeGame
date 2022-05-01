@@ -6,6 +6,10 @@ import android.graphics.Rect;
 
 import androidx.annotation.NonNull;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
+
 class CustomCanvas extends Canvas {
     Canvas canvas;
     Paint paint;
@@ -33,7 +37,8 @@ class CustomCanvas extends Canvas {
         canvas.drawRGB(r, g, b);
     }
 
-    Paint paint(int color) {
+    Paint paint(int color, Paint.Style style) {
+        paint.setStyle(style);
         paint.setColor(color);
         return paint;
     }
@@ -46,17 +51,24 @@ class CustomCanvas extends Canvas {
         return (int) (canvas.getHeight() * percent);
     }
 
-
-
-
     /** @return the greatest common denominator */
     public long gcd(long a, long b) {
         return b == 0 ? a : gcd(b, a % b);
     }
 
-    public int[] asFraction(long a, long b) {
+    public List<Integer> asFraction(long a, long b) {
         long gcd = gcd(a, b);
-        return new int[] {(int) (a/gcd), (int) (b/gcd)};
+        return Arrays.asList((int)(a/gcd), (int) (b/gcd));
     }
 
+
+    @Override
+    public int getHeight() {
+        return canvas.getHeight();
+    }
+
+    @Override
+    public int getWidth() {
+        return canvas.getWidth();
+    }
 }
