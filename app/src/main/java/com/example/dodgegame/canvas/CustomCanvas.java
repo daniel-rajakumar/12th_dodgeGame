@@ -1,4 +1,4 @@
-package com.example.dodgegame.drawCanvas;
+package com.example.dodgegame.canvas;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -45,4 +45,18 @@ class CustomCanvas extends Canvas {
     int y_per(double percent){
         return (int) (canvas.getHeight() * percent);
     }
+
+
+
+
+    /** @return the greatest common denominator */
+    public long gcd(long a, long b) {
+        return b == 0 ? a : gcd(b, a % b);
+    }
+
+    public int[] asFraction(long a, long b) {
+        long gcd = gcd(a, b);
+        return new int[] {(int) (a/gcd), (int) (b/gcd)};
+    }
+
 }

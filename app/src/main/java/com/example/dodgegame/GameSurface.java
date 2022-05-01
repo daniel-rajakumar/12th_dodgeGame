@@ -5,13 +5,12 @@ import android.graphics.Canvas;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener2;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.example.dodgegame.drawCanvas.DrawCanvas;
+import com.example.dodgegame.canvas.DrawCanvas;
 
-public class GameSurface extends SurfaceView implements Runnable, SensorEventListener2 {
+public class GameSurface extends SurfaceView implements Runnable {
 
     private static final String TAG = "test";
     SurfaceHolder surfaceHolder;
@@ -25,20 +24,6 @@ public class GameSurface extends SurfaceView implements Runnable, SensorEventLis
         this.drawCanvas = new DrawCanvas();
     }
 
-    @Override
-    public void onFlushCompleted(Sensor sensor) {
-
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent sensorEvent) {
-
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-
-    }
 
     @Override
     public void run() {
