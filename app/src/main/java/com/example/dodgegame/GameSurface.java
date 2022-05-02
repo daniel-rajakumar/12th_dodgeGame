@@ -22,12 +22,12 @@ public class GameSurface extends SurfaceView implements Runnable {
     public GameSurface(Context context) {
         super(context);
         this.surfaceHolder = getHolder();
-        this.drawCanvas = new DrawCanvas();
     }
 
 
     @Override
     public void run() {
+        this.drawCanvas = new DrawCanvas();
         while (running) {
             if (!surfaceHolder.getSurface().isValid()) continue;
             Canvas canvas = surfaceHolder.lockCanvas();

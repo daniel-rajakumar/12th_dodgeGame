@@ -11,6 +11,7 @@ import android.view.Display;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 public class DrawCanvas extends CustomCanvas {
     private static final String TAG = "Test";
@@ -18,12 +19,13 @@ public class DrawCanvas extends CustomCanvas {
 
     public void update(Canvas canvas){
         setCanvas(canvas);
-        drawRGB(0,255,0);
+        updateGameWidth();
+        setInGame(true);
+        drawRect(Rect(0, 0, 1, 1), Paint(Color.RED, Paint.Style.FILL));
+        Log.d(TAG, "update: " + getGameWidth() + ": " + getGameHeight());
 
-        drawRect(Rect(0.1, 0.1, 0.8, 0.8), paint(Color.RED, Paint.Style.FILL_AND_STROKE));
 
-        Log.d(TAG, "update: " + getWidth() + ": " + getHeight());
-        Log.d(TAG, "update: " + asFraction(getWidth(), getHeight()));
+
 //
 //        drawRect(Rect(0.5, (i += 0.001), 0.5, 0.1),
 //                 paint(Color.GREEN, Paint.Style.STROKE));

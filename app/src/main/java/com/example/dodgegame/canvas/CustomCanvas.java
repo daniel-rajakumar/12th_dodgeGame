@@ -1,8 +1,10 @@
 package com.example.dodgegame.canvas;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -11,8 +13,11 @@ import java.util.Arrays;
 import java.util.List;
 
 class CustomCanvas extends Canvas {
+    private static final String TAG = "test";
     Canvas canvas;
     Paint paint;
+    int gameWidth = -1, gameHeight = -1;
+    boolean inGame;
 
     CustomCanvas() {
         paint = new Paint();
@@ -20,6 +25,11 @@ class CustomCanvas extends Canvas {
 
     public void setCanvas(Canvas canvas) {
         this.canvas = canvas;
+    }
+
+
+    public void setInGame(boolean inGame) {
+        this.inGame = inGame;
     }
 
     @Override
@@ -37,19 +47,20 @@ class CustomCanvas extends Canvas {
         canvas.drawRGB(r, g, b);
     }
 
-    Paint paint(int color, Paint.Style style) {
+    Paint Paint(int color, Paint.Style style) {
         paint.setStyle(style);
         paint.setColor(color);
         return paint;
     }
 
     int x_per(double percent){
-        return (int) (canvas.getWidth() * percent);
+        return (int) ((inGame ? getGameWidth(): getFullWidth()) * percent);
     }
 
     int y_per(double percent){
-        return (int) (canvas.getHeight() * percent);
+        return (int) ((inGame ? getGameHeight(): getFullHeight()) * percent);
     }
+
 
     /** @return the greatest common denominator */
     public long gcd(long a, long b) {
@@ -62,13 +73,32 @@ class CustomCanvas extends Canvas {
     }
 
 
-    @Override
-    public int getHeight() {
+    public int getFullHeight() {
         return canvas.getHeight();
     }
 
-    @Override
-    public int getWidth() {
+    public int getFullWidth() {
         return canvas.getWidth();
     }
+
+    public void updateGameWidth(){
+        if (gameWidth != -1 && gameHeight != -1) return;
+
+        int w = getFullWidth(), h = getFullHeight();
+        List<Integer> list = asFraction(w, h);
+        while (list.get(0) != 2 && list.get(1) != 3){
+            list = asFraction(w, --h);
+        }
+        gameWidth = w;
+        gameHeight = h;
+    }
+
+    public int getGameWidth(){
+        return gameWidth;
+    }
+
+    public int getGameHeight(){
+        return gameHeight;
+    }
+
 }
