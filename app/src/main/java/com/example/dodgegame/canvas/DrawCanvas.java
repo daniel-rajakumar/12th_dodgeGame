@@ -21,9 +21,12 @@ public class DrawCanvas extends CustomCanvas {
         setCanvas(canvas);
         updateGameWidth();
         setInGame(true);
-        drawRect(Rect(0, 0, 1, 1), Paint(Color.RED, Paint.Style.FILL));
-        Log.d(TAG, "update: " + getGameWidth() + ": " + getGameHeight());
+        drawRect(Rect(0,0,1, 1), Paint(Color.RED, Paint.Style.FILL));
+        drawRect(Rect(0, 0, 0.5, 0.5), Paint(Color.GREEN, Paint.Style.FILL));
+        setInGame(false);
+        drawRect(Rect(0, 0.5, 0.5, 0.5), Paint(Color.BLUE, Paint.Style.FILL));
 
+        Log.d(TAG, "update: " + getGameWidth() + ": " + getGameHeight());
 
 
 //

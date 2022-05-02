@@ -29,6 +29,7 @@ class CustomCanvas extends Canvas {
 
 
     public void setInGame(boolean inGame) {
+        translate(0, (inGame ? 1 : -1) * (getFullHeight() - getGameHeight())/2f);
         this.inGame = inGame;
     }
 
@@ -38,7 +39,10 @@ class CustomCanvas extends Canvas {
     }
 
     public Rect Rect(double left, double top, double width, double height) {
-        return new Rect(x_per(left), y_per(top), x_per(left) + x_per(width), y_per(top) + y_per(height));
+        return new Rect( x_per(left),
+                         y_per(top),
+                        x_per(left) + x_per(width),
+                        y_per(top) + y_per(height));
     }
 
 
@@ -54,11 +58,11 @@ class CustomCanvas extends Canvas {
     }
 
     int x_per(double percent){
-        return (int) ((inGame ? getGameWidth(): getFullWidth()) * percent);
+        return (int) (inGame ? getGameWidth() * percent: getFullWidth() * percent);
     }
 
     int y_per(double percent){
-        return (int) ((inGame ? getGameHeight(): getFullHeight()) * percent);
+        return (int)(inGame ? (getGameHeight() * percent): (getFullHeight() * percent));
     }
 
 
@@ -101,4 +105,19 @@ class CustomCanvas extends Canvas {
         return gameHeight;
     }
 
+    @Override
+    public int save() {
+        return canvas.save();
+    }
+
+    @Override
+    public void restore() {
+        canvas.restore();
+    }
+
+
+    @Override
+    public void translate(float dx, float dy) {
+        canvas.translate(dx, dy);
+    }
 }
