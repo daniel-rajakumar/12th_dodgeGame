@@ -31,7 +31,7 @@ public class GameSurface extends SurfaceView implements Runnable {
         while (running) {
             if (!surfaceHolder.getSurface().isValid()) continue;
             Canvas canvas = surfaceHolder.lockCanvas();
-            drawCanvas.update(canvas);
+            drawCanvas.update(this.getContext(), canvas);
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
     }

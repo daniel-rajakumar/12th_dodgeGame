@@ -1,12 +1,15 @@
 package com.example.dodgegame.canvas;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -49,6 +52,11 @@ class CustomCanvas extends Canvas {
     @Override
     public void drawRGB(int r, int g, int b) {
         canvas.drawRGB(r, g, b);
+    }
+
+    @Override
+    public void drawBitmap(@NonNull Bitmap bitmap, @NonNull Matrix matrix, @Nullable Paint paint) {
+        canvas.drawBitmap(bitmap, matrix, paint);
     }
 
     Paint Paint(int color, Paint.Style style) {
@@ -114,6 +122,10 @@ class CustomCanvas extends Canvas {
     public void restore() {
         canvas.restore();
     }
+
+
+
+
 
 
     @Override

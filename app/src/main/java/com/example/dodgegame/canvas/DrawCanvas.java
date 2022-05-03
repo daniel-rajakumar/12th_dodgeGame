@@ -1,12 +1,18 @@
 package com.example.dodgegame.canvas;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.Log;
 import android.view.Display;
+
+import com.example.dodgegame.R;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -17,21 +23,32 @@ public class DrawCanvas extends CustomCanvas {
     private static final String TAG = "Test";
     double i = 0;
 
-    public void update(Canvas canvas){
+    public void update(Context context,Canvas canvas){
         setCanvas(canvas);
+        drawRGB(0,0,0);
         updateGameWidth();
         setInGame(true);
-        drawRect(Rect(0,0,1, 1), Paint(Color.RED, Paint.Style.FILL));
-        drawRect(Rect(0, 0, 0.5, 0.5), Paint(Color.GREEN, Paint.Style.FILL));
+//        drawRect(Rect(0,0,1, 1), Paint(Color.RED, Paint.Style.FILL));
+//        drawRect(Rect(0, 0, 0.5, 0.5), Paint(Color.GREEN, Paint.Style.FILL));
+
+        Bitmap image = BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite);
+        i+=0.1;
+        int w = 48;
+//        int w = (int) ((i * 50) % 9);
+        int x = ((int) i * w) % (w * 8) + 50;
+        image = Bitmap.createBitmap(image, x, 48 * 8, 50, 50);
+        Log.d(TAG, "update: " + x);
+        Matrix matrix = new Matrix();
+
+        matrix.setTranslate(getFullWidth()/2f, getFullHeight()/2f);
+        matrix.setScale(5f, 5f, 5f, 5f);
+
+        drawBitmap(image, matrix, null);
         setInGame(false);
-        drawRect(Rect(0, 0.5, 0.5, 0.5), Paint(Color.BLUE, Paint.Style.FILL));
-
-        Log.d(TAG, "update: " + getGameWidth() + ": " + getGameHeight());
+//        drawRect(Rect(0, 0.5, 0.5, 0.5), Paint(Color.BLUE, Paint.Style.FILL));
 
 
-//
-//        drawRect(Rect(0.5, (i += 0.001), 0.5, 0.1),
-//                 paint(Color.GREEN, Paint.Style.STROKE));
+//        Log.d(TAG, "update: " + getGameWidth() + ": " + getGameHeight());
     }
 }
 
