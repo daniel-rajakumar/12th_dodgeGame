@@ -35,6 +35,7 @@ public class DrawCanvas extends CustomCanvas {
             start = false;
         }
         player.update();
+        player.moveRight();
 
 
 
