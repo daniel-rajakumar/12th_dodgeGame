@@ -21,13 +21,23 @@ import java.util.List;
 
 public class DrawCanvas extends CustomCanvas {
     private static final String TAG = "Test";
-    double i = 0;
+    int i = 0;
+    static Player player;
+
+    boolean start = true;
 
     public void update(Context context,Canvas canvas){
+        canvas.drawRGB(0,0,0);
         Paint paint = new Paint();
         paint.setColor(Color.RED);
+        if (start){
+            player = new Player(context, canvas);
+            start = false;
+        }
+        player.update();
 
-        canvas.drawRect(new Rect(0, 0, 50, 50), paint);
+
+
 //        setCanvas(canvas);
 //        drawRGB(0,0,0);
 //        updateGameWidth();
