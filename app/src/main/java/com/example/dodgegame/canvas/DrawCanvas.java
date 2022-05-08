@@ -9,6 +9,9 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener2;
 import android.util.Log;
 import android.view.Display;
 
@@ -35,7 +38,7 @@ public class DrawCanvas extends CustomCanvas {
             start = false;
         }
         player.update();
-        player.moveRight();
+//        player.moveRight();
 
 
 
