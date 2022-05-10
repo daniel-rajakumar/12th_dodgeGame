@@ -49,17 +49,18 @@ public class DrawCanvas extends CustomCanvas {
             background();
         }
         updateEnemies();
-        for (int i = 0; i < enemies.size(); i++) {
-            enemies.get(i).update();
-        }
         player.update();
     }
 
 
     public void updateEnemies(){
-        // remove
         enemies.removeIf(enemy -> enemy.y == canvas.getHeight());
 
+        for (int i = 0; i < enemies.size(); i++) {
+            enemies.get(i).update();
+        }
+
+        Log.d(TAG, "updateEnemies: " + enemies.size());
     }
 
     public void background(){
@@ -68,7 +69,7 @@ public class DrawCanvas extends CustomCanvas {
             public void run() {
                 enemies.add(new Enemy(context, canvas, new Random().nextFloat()));
             }
-        }, 0, 3000);
+        }, 0, 500);
 
     }
 
