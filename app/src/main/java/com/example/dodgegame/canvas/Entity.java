@@ -22,46 +22,81 @@ abstract public class Entity {
     Canvas canvas;
     Context context;
     int x, y;
-    int image_index_max, image_index;
     Bitmap image;
     int sprite_width, sprite_height;
     Direction direction;
-    int moveSpeed = 25;
+    int moveSpeed;
+    int drawable;
+    int sprite_x_max, sprite_x, sprite_y;
+    int count;
 
     public Entity(Context context, Canvas canvas) {
         this.canvas = canvas;
         this.context = context;
-        this.x = x_per(0.5);
-        this.y = y_per(0.8);
     }
 
+    public void setImage(int drawable, int sprite_y, int sprite_x_max) {
+        this.sprite_x_max = sprite_x_max;
+        this.sprite_y = sprite_y;
 
-    void draw(){
-        this.image = BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_player);
+        this.image = BitmapFactory.decodeResource(context.getResources(), drawable);
         this.sprite_width  = image.getWidth()  / 13;
         this.sprite_height = image.getHeight() / 21;
+    }
 
-        this.image = Bitmap.createBitmap(this.image
-                , (sprite_width/4) + (sprite_width *  (1 + image_index))
-                , (sprite_height/4) + (sprite_height * 8)
-                , sprite_width -  (sprite_width/4)
-                , sprite_height - (sprite_height/4));
+    void setLocation(float x, float y){
+        this.x = x_per(x);
+        this.y = y_per(y);
+    }
 
-        Matrix matrix = new Matrix();
+    public void setDrawable(int drawable) {
+        this.image = BitmapFactory.decodeResource(context.getResources(), drawable);
+    }
+
+    void draw(){
         canvas.save();
         canvas.translate(x, y);
         canvas.scale(3f, 3f);
-        canvas.drawBitmap(image, matrix, null);
+        canvas.drawBitmap(
+                Bitmap.createBitmap(this.image
+                        , (sprite_width/4) + (sprite_width *  (1 + sprite_x))
+                        , (sprite_height/4) + (sprite_height * sprite_y)
+                        , sprite_width -  (sprite_width/4)
+                        , sprite_height - (sprite_height/4))
+                , new Matrix(), null);
         canvas.restore();
     }
 
      abstract void move();
 
     void update(){
+        count++;
         move();
         draw();
-        image_index++;
-        image_index %= image_index_max;
+        if (count % 10 == 0)
+            sprite_x++;
+        sprite_x %= sprite_x_max;
+    }
+
+    void moveLeft(){
+        if (x - moveSpeed < 0) {
+//            this.x=0;
+            return;
+        }
+        x -= moveSpeed;
+    }
+
+    void moveRight(){
+        if ((x + (sprite_width - sprite_width/4) * 2) + moveSpeed > canvas.getWidth()) {
+//            this.x = canvas.getWidth() - (sprite_width - (sprite_width/4)) * 2;
+            return;
+        }
+        x += moveSpeed;
+    }
+
+
+    void moveBottom(){
+        y += moveSpeed;
     }
 
     int x_per(double percent){
@@ -72,7 +107,9 @@ abstract public class Entity {
         return (int) (canvas.getHeight() * percent);
     }
 
-    public void setImage_index_max(int image_index_max) {
-        this.image_index_max = image_index_max;
+
+    public void setMoveSpeed(int moveSpeed) {
+        this.moveSpeed = moveSpeed;
     }
+
 }

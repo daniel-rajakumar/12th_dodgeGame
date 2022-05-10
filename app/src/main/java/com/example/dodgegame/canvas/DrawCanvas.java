@@ -20,57 +20,57 @@ import com.example.dodgegame.R;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.stream.IntStream;
 
 public class DrawCanvas extends CustomCanvas {
     private static final String TAG = "Test";
     int i = 0;
-    static Player player;
+    Player player;
+    LinkedList<Enemy> enemies = new LinkedList<>();
+    Context context;
+    Canvas canvas;
 
     boolean start = true;
 
     public void update(Context context,Canvas canvas){
+        this.context = context;
+        this.canvas = canvas;
+
         canvas.drawRGB(0,0,0);
-        Paint paint = new Paint();
-        paint.setColor(Color.RED);
         if (start){
             player = new Player(context, canvas);
             start = false;
+            background();
+        }
+        updateEnemies();
+        for (int i = 0; i < enemies.size(); i++) {
+            enemies.get(i).update();
         }
         player.update();
-//        player.moveRight();
-
-
-
-//        setCanvas(canvas);
-//        drawRGB(0,0,0);
-//        updateGameWidth();
-//        setInGame(true);
-////        drawRect(Rect(0,0,1, 1), Paint(Color.RED, Paint.Style.FILL));
-////        drawRect(Rect(0, 0, 0.5, 0.5), Paint(Color.GREEN, Paint.Style.FILL));
-//
-//        Bitmap image = BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite);
-//        i+=0.1;
-//        int w = 48;
-////        int w = (int) ((i * 50) % 9);
-//        int x = ((int) i * w) % (w * 8) + 50;
-//        image = Bitmap.createBitmap(image, x, 48 * 8, 50, 50);
-////        Log.d(TAG, "update: " + x);
-//        Matrix matrix1 = new Matrix();
-//        Matrix matrix2 = new Matrix();
-//        Matrix matrix = new Matrix();
-//
-//        matrix1.setScale(5f, 5f, 5f, 5f);
-//        matrix2.setTranslate(getFullWidth()/2f, getFullHeight()/2f);
-//
-//        new Matrix(matrix1);
-//        Log.d(TAG, "update: " + matrix);
-//        drawBitmap(image, matrix, null);
-//        setInGame(false);
-//        drawRect(Rect(0, 0.5, 0.5, 0.5), Paint(Color.BLUE, Paint.Style.FILL));
-
-
-//        Log.d(TAG, "update: " + getGameWidth() + ": " + getGameHeight());
     }
+
+
+    public void updateEnemies(){
+        // remove
+        enemies.removeIf(enemy -> enemy.y == canvas.getHeight());
+
+    }
+
+    public void background(){
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                enemies.add(new Enemy(context, canvas, new Random().nextFloat()));
+            }
+        }, 0, 3000);
+
+    }
+
 }
 

@@ -12,6 +12,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener2;
 import android.hardware.SensorManager;
 import android.util.Log;
+import android.widget.Switch;
 
 import com.example.dodgegame.R;
 
@@ -20,7 +21,10 @@ public class Player extends Entity implements SensorEventListener2 {
 
     Player(Context context, Canvas canvas){
         super(context, canvas);
-        setImage_index_max(8);
+        setImage(R.drawable.sprite_player, 8, 8);
+        setMoveSpeed(5);
+        setLocation(0.5f, 0.8f);
+//        setDrawable(R.drawable.sprite_player);
 
         SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         Sensor accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -33,22 +37,6 @@ public class Player extends Entity implements SensorEventListener2 {
         if (direction == Direction.LEFT)  moveLeft();
     }
 
-    void moveLeft(){
-        if (x - moveSpeed < 0) {
-//            this.x=0;
-            return;
-        }
-        x-=moveSpeed;
-    }
-
-    void moveRight(){
-        if ((x + (sprite_width - sprite_width/4) * 2) + moveSpeed > canvas.getWidth()) {
-//            this.x = canvas.getWidth() - (sprite_width - (sprite_width/4)) * 2;
-            return;
-        }
-        x+=moveSpeed;
-    }
-
     @Override
     public void onFlushCompleted(Sensor sensor) { }
 
@@ -59,6 +47,12 @@ public class Player extends Entity implements SensorEventListener2 {
         direction = Direction.NONE;
         if (Math.abs(x) > 2f) {
             direction = (x < 0) ? Direction.RIGHT : Direction.LEFT;
+        }
+
+        switch (direction){
+            case LEFT: setImage(R.drawable.sprite_player, 9, 8); break;
+            case RIGHT: setImage(R.drawable.sprite_player, 11, 8);  break;
+            default: setImage(R.drawable.sprite_player, 8, 8); break;
         }
     }
 
