@@ -13,9 +13,13 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener2;
 import android.hardware.SensorManager;
 import android.util.Log;
+import android.widget.Switch;
 
 import com.example.dodgegame.R;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -29,7 +33,6 @@ abstract public class Entity {
     Canvas canvas;
     Context context;
     int x, y;
-    Bitmap image;
     int sprite_width, sprite_height;
     Direction direction;
     int moveSpeed;
@@ -38,6 +41,8 @@ abstract public class Entity {
     int count;
     Rect collision;
     boolean toRemove;
+    static Map<String, Bitmap> sprites = new HashMap<>();
+    Bitmap image;
 
     public Entity(Context context, Canvas canvas) {
         this.canvas = canvas;
@@ -45,14 +50,29 @@ abstract public class Entity {
         toRemove = false;
     }
 
-    public void setImage(int drawable, int sprite_y, int sprite_x_max) {
-        this.sprite_x_max = sprite_x_max;
-        this.sprite_y = sprite_y;
+//    public void setImage(int drawable, int sprite_y, int sprite_x_max) {
+    public void setImage(Direction direction) {
+        if (this instanceof Player) this.image = sprites.get("player");
+        if (this instanceof Enemy ) this.image = sprites.get("enemy");
+//        Log.d(TAG, "setImage: " + (this instanceof Player)+ this );
+        Log.d(TAG, "setImage: " + (sprites));
 
-        this.image = BitmapFactory.decodeResource(context.getResources(), drawable);
+        switch (direction){
+            case LEFT:   this.sprite_x_max = 8; sprite_y = 9;  break;
+            case RIGHT:  this.sprite_x_max = 8; sprite_y = 11;  break;
+            case BOTTOM: this.sprite_x_max = 8; sprite_y = 10;  break;
+            case TOP:    this.sprite_x_max = 8; sprite_y = 8; break;
+        }
+
         this.sprite_width  = image.getWidth()  / 13;
         this.sprite_height = image.getHeight() / 21;
     }
+
+    static void loadAllSpites(Context context){
+        sprites.put("player", BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_player));
+        sprites.put("enemy", BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_enemy));
+    }
+
 
     void setLocation(float x, float y){
         this.x = x_per(x);

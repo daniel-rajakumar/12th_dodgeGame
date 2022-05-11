@@ -22,10 +22,9 @@ public class Player extends Entity implements SensorEventListener2 {
 
     Player(Context context, Canvas canvas){
         super(context, canvas);
-        setImage(R.drawable.sprite_player, 8, 8);
+        setImage(Direction.TOP);
         setMoveSpeed(5);
         setLocation(0.5f, 0.8f);
-
 
         SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         Sensor accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -72,19 +71,13 @@ public class Player extends Entity implements SensorEventListener2 {
     public void onSensorChanged(SensorEvent sensorEvent) {
         float x = sensorEvent.values[0];
 
-
-//        direction = Direction.NONE;
+        direction = Direction.TOP;
         if (Math.abs(x) > 2f) {
-//            direction = (x < 0) ? Direction.RIGHT : Direction.LEFT;
             direction = (x < 0) ? Direction.RIGHT : Direction.LEFT;
         }
 
         Log.d(TAG, "onSensorChanged: " + direction);
-        switch (direction){
-            case LEFT: setImage(R.drawable.sprite_player, 9, 8); break;
-            case RIGHT: setImage(R.drawable.sprite_player, 11, 8);  break;
-            default: setImage(R.drawable.sprite_player, 8, 8); break;
-        }
+        setImage(direction);
     }
 
     @Override

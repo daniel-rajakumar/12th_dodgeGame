@@ -46,6 +46,7 @@ public class DrawCanvas extends CustomCanvas {
 
         if (start){
             start = false;
+            Entity.loadAllSpites(context);
             player = new Player(context, canvas);
             background();
         }

@@ -17,7 +17,7 @@ public class Enemy extends Entity {
 
     Enemy(Context context, Canvas canvas, float x){
         super(context, canvas);
-        setImage(R.drawable.sprite_enemy, 10, 8);
+        setImage(Direction.BOTTOM);
         setMoveSpeed(5);
         setLocation(x, 0);
         direction = Direction.BOTTOM;
