@@ -63,7 +63,6 @@ public class Player extends Entity implements SensorEventListener2 {
 //        Log.d(TAG, "updateCollision: " + DrawCanvas.gameRunning);
     }
 
-
     @Override
     public void onFlushCompleted(Sensor sensor) { }
 
