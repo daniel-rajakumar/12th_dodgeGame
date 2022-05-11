@@ -75,7 +75,7 @@ public class Player extends Entity implements SensorEventListener2 {
             direction = (x < 0) ? Direction.RIGHT : Direction.LEFT;
         }
 
-        Log.d(TAG, "onSensorChanged: " + direction);
+//        Log.d(TAG, "onSensorChanged: " + direction);
         setImage(direction);
     }
 

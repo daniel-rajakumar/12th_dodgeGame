@@ -55,7 +55,7 @@ abstract public class Entity {
         if (this instanceof Player) this.image = sprites.get("player");
         if (this instanceof Enemy ) this.image = sprites.get("enemy");
 //        Log.d(TAG, "setImage: " + (this instanceof Player)+ this );
-        Log.d(TAG, "setImage: " + (sprites));
+//        Log.d(TAG, "setImage: " + (sprites));
 
         switch (direction){
             case LEFT:   this.sprite_x_max = 8; sprite_y = 9;  break;

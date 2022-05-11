@@ -40,6 +40,16 @@ public class Enemy extends Entity {
         if (this.y > canvas.getHeight()){
             setToRemove(true);
         }
+
+        for (int i = 0; i < DrawCanvas.enemies.size(); i++){
+            Rect temp2 = DrawCanvas.enemies.get(i).collision;
+            Rect temp1 = DrawCanvas.player.collision;
+            if (temp1 != null && temp2 != null)
+                if (Rect.intersects(temp1, temp2)) {
+                    DrawCanvas.enemies.get(i).setToRemove(true);
+                }
+
+        }
     }
 
 }

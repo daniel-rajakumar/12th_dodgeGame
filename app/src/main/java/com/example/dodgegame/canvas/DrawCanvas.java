@@ -28,7 +28,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.stream.IntStream;
 
-public class DrawCanvas extends CustomCanvas {
+public class DrawCanvas {
     private static final String TAG = "Test";
     int i = 0;
     static Player player;
