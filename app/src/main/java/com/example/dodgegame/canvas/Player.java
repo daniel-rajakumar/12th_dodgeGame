@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener2;
@@ -24,7 +25,7 @@ public class Player extends Entity implements SensorEventListener2 {
         setImage(R.drawable.sprite_player, 8, 8);
         setMoveSpeed(5);
         setLocation(0.5f, 0.8f);
-//        setDrawable(R.drawable.sprite_player);
+
 
         SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         Sensor accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -35,7 +36,34 @@ public class Player extends Entity implements SensorEventListener2 {
     void move() {
         if (direction == Direction.RIGHT) moveRight();
         if (direction == Direction.LEFT)  moveLeft();
+
+        updateCollision();
     }
+
+    @Override
+    void checkIsAlive() {
+
+    }
+
+    void updateCollision(){
+        setCollision(new Rect(
+                this.x + (this.sprite_width/2),
+                this.y + this.sprite_height,
+                (this.x + (this.sprite_width/2)) + this.sprite_width/2,
+                this.y + this.sprite_height * 2));
+
+        for (int i = 0; i < DrawCanvas.enemies.size(); i++){
+            Rect temp = DrawCanvas.enemies.get(i).collision;
+            if (temp != null) {
+                if (Rect.intersects(collision, temp)){
+                    DrawCanvas.gameRunning = false;
+                }
+            }
+        }
+
+//        Log.d(TAG, "updateCollision: " + DrawCanvas.gameRunning);
+    }
+
 
     @Override
     public void onFlushCompleted(Sensor sensor) { }
@@ -44,11 +72,14 @@ public class Player extends Entity implements SensorEventListener2 {
     public void onSensorChanged(SensorEvent sensorEvent) {
         float x = sensorEvent.values[0];
 
-        direction = Direction.NONE;
+
+//        direction = Direction.NONE;
         if (Math.abs(x) > 2f) {
+//            direction = (x < 0) ? Direction.RIGHT : Direction.LEFT;
             direction = (x < 0) ? Direction.RIGHT : Direction.LEFT;
         }
 
+        Log.d(TAG, "onSensorChanged: " + direction);
         switch (direction){
             case LEFT: setImage(R.drawable.sprite_player, 9, 8); break;
             case RIGHT: setImage(R.drawable.sprite_player, 11, 8);  break;

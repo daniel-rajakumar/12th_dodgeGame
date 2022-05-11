@@ -4,7 +4,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener2;
@@ -12,6 +15,10 @@ import android.hardware.SensorManager;
 import android.util.Log;
 
 import com.example.dodgegame.R;
+
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 enum Direction {
     RIGHT, LEFT, TOP, BOTTOM,NONE
@@ -29,10 +36,13 @@ abstract public class Entity {
     int drawable;
     int sprite_x_max, sprite_x, sprite_y;
     int count;
+    Rect collision;
+    boolean toRemove;
 
     public Entity(Context context, Canvas canvas) {
         this.canvas = canvas;
         this.context = context;
+        toRemove = false;
     }
 
     public void setImage(int drawable, int sprite_y, int sprite_x_max) {
@@ -68,14 +78,30 @@ abstract public class Entity {
     }
 
      abstract void move();
+    abstract void checkIsAlive();
 
     void update(){
         count++;
         move();
         draw();
+        showCollision();
+        checkIsAlive();
+
+
+
+
+
         if (count % 10 == 0)
             sprite_x++;
         sprite_x %= sprite_x_max;
+    }
+
+
+    void showCollision(){
+        Paint paint = new Paint();
+        paint.setColor(Color.RED);
+
+        canvas.drawRect(collision, paint);
     }
 
     void moveLeft(){
@@ -112,4 +138,30 @@ abstract public class Entity {
         this.moveSpeed = moveSpeed;
     }
 
+
+    public void setCollision(Rect collision) {
+        if (collision != null)
+            this.collision = collision;
+    }
+
+    void fallDown(){
+        sprite_y = 20;
+        sprite_x_max = 6;
+//        final int[] count = {0};
+//        Timer timer = new Timer();
+//        timer.schedule(new TimerTask() {
+//            public void run() {
+//                count[0]++;
+//            }
+//        }, 0, 1000);
+
+    }
+
+    public boolean isToRemove() {
+        return toRemove;
+    }
+
+    public void setToRemove(boolean toRemove) {
+        this.toRemove = toRemove;
+    }
 }

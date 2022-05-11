@@ -31,46 +31,49 @@ import java.util.stream.IntStream;
 public class DrawCanvas extends CustomCanvas {
     private static final String TAG = "Test";
     int i = 0;
-    Player player;
-    LinkedList<Enemy> enemies = new LinkedList<>();
+    static Player player;
+    static LinkedList<Enemy> enemies = new LinkedList<>();
     Context context;
     Canvas canvas;
+    Timer timer;
 
-    boolean start = true;
+    static boolean start = true, end = false;
+    static boolean gameRunning = true;
 
     public void update(Context context,Canvas canvas){
         this.context = context;
         this.canvas = canvas;
 
-        canvas.drawRGB(0,0,0);
         if (start){
-            player = new Player(context, canvas);
             start = false;
+            player = new Player(context, canvas);
             background();
         }
+
+        canvas.drawRGB(0,0,0);
         updateEnemies();
         player.update();
     }
 
 
     public void updateEnemies(){
-        enemies.removeIf(enemy -> enemy.y == canvas.getHeight());
+//        enemies.removeIf(enemy -> enemy.y == canvas.getHeight());
+        enemies.removeIf(Enemy::isToRemove);
 
         for (int i = 0; i < enemies.size(); i++) {
             enemies.get(i).update();
         }
 
-        Log.d(TAG, "updateEnemies: " + enemies.size());
+//        Log.d(TAG, "updateEnemies: " + enemies.size());
     }
 
     public void background(){
-        Timer timer = new Timer();
+        timer = new Timer();
         timer.schedule(new TimerTask() {
             public void run() {
-                enemies.add(new Enemy(context, canvas, new Random().nextFloat()));
+                    enemies.push(new Enemy(context, canvas, new Random().nextFloat()));
             }
-        }, 0, 500);
-
+        }, 0, 1000);
     }
 
 }
