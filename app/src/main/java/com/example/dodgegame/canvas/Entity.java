@@ -104,7 +104,7 @@ abstract public class Entity {
         count++;
         move();
         draw();
-        showCollision();
+//        showCollision();
         checkIsAlive();
 
 

@@ -33,6 +33,7 @@ public class DrawCanvas {
     int i = 0;
     static Player player;
     static LinkedList<Enemy> enemies = new LinkedList<>();
+    static LinkedList<Enemy> bullets = new LinkedList<>();
     Context context;
     Canvas canvas;
     Timer timer;
