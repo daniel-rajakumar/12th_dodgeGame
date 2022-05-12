@@ -50,33 +50,30 @@ public class Enemy extends Entity {
             Rect temp1 = DrawCanvas.player.collision;
             if (temp1 != null && temp2 != null)
                 if (Rect.intersects(temp1, temp2)) {
-                    removeEnemy(DrawCanvas.enemies.get(i), i);
+                    removeEnemy(DrawCanvas.enemies.get(i));
 //                    DrawCanvas.enemies.get(i).setToRemove(true);
-                    Log.d(TAG, "checkIsAlive: remove!");
+//                    Log.d(TAG, "checkIsAlive: remove!");
                 }
         }
     }
 
-    void removeEnemy(Enemy enemy, int i){
-//        if (!enemy.toRemove) return;
+    void removeEnemy(Enemy enemy){
+        if (enemy.isHasTouched()) return;
 
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            int count = 0;
+        enemy.setHasTouched(true);
+        enemy.direction = Direction.NONE;
+        enemy.sprite_x = 0;
+        enemy.sprite_x_max = 5;
+        enemy.sprite_y = 20;
+
+        new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                Log.d(TAG, "run: " + count);
-                count++;
-                if (count > 5){
-                    enemy.setToRemove(true);
-//                    DrawCanvas.enemies.get(i).setToRemove(true);
-//                    enemy.toRemove = true;
-                    timer.cancel();
-                }
+                if (++enemy.sprite_x <= enemy.sprite_x_max) return;
+                enemy.setToRemove(true);
+                cancel();
             }
-
-        }, 0, 100);
-//        DrawCanvas.enemies.get(i).toRemove = true;
+        }, 500, 500);
     }
 
 

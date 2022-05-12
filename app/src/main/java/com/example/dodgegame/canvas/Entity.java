@@ -25,7 +25,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 enum Direction {
-    RIGHT, LEFT, TOP, BOTTOM,NONE
+    RIGHT, LEFT, TOP, BOTTOM, NONE
 }
 
 abstract public class Entity {
@@ -40,7 +40,7 @@ abstract public class Entity {
     int sprite_x_max, sprite_x, sprite_y;
     int count;
     Rect collision;
-    boolean toRemove;
+    boolean toRemove, hasTouched;
     static Map<String, Bitmap> sprites = new HashMap<>();
     Bitmap image;
 
@@ -64,13 +64,14 @@ abstract public class Entity {
             case TOP:    this.sprite_x_max = 8; sprite_y = 8; break;
         }
 
+
         this.sprite_width  = image.getWidth()  / 13;
         this.sprite_height = image.getHeight() / 21;
     }
 
     static void loadAllSpites(Context context){
         sprites.put("player", BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_player));
-        sprites.put("enemy", BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_enemy));
+        sprites.put("enemy",  BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_enemy));
     }
 
 
@@ -108,12 +109,12 @@ abstract public class Entity {
         checkIsAlive();
 
 
+        if (!isHasTouched()){
+            if (count % 10 == 0)
+                sprite_x++;
 
-
-
-        if (count % 10 == 0)
-            sprite_x++;
-        sprite_x %= sprite_x_max;
+            sprite_x %= sprite_x_max;
+        }
     }
 
 
@@ -183,5 +184,13 @@ abstract public class Entity {
 
     public void setToRemove(boolean toRemove) {
         this.toRemove = toRemove;
+    }
+
+    public void setHasTouched(boolean hasTouched) {
+        this.hasTouched = hasTouched;
+    }
+
+    public boolean isHasTouched() {
+        return hasTouched;
     }
 }
