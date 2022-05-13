@@ -6,8 +6,10 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener2;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 import com.example.dodgegame.canvas.DrawCanvas;
 
@@ -22,6 +24,10 @@ public class GameSurface extends SurfaceView implements Runnable {
     public GameSurface(Context context) {
         super(context);
         this.surfaceHolder = getHolder();
+        setOnTouchListener((view, motionEvent) -> {
+            Log.d(TAG, "GameSurface: " + "touch");
+            return false;
+        });
     }
 
 
