@@ -83,8 +83,6 @@ public class Player extends Entity implements SensorEventListener2 {
                 }
             }
         }
-
-//        Log.d(TAG, "updateCollision: " + DrawCanvas.gameRunning);
     }
 
     @Override
@@ -99,7 +97,6 @@ public class Player extends Entity implements SensorEventListener2 {
             direction = (x < 0) ? Direction.RIGHT : Direction.LEFT;
         }
 
-//        Log.d(TAG, "onSensorChanged: " + direction);
         if (!isPerformingAction())
             setImage(direction);
     }

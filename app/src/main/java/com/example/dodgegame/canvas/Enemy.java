@@ -14,7 +14,6 @@ public class Enemy extends Entity {
         super(context, canvas);
         setImage(Direction.BOTTOM);
         setMoveSpeed(5);
-//        setLocation_byPercentage(x, 0.7f);
         setLocation_byPixel(x, y);
         direction = Direction.BOTTOM;
     }
@@ -32,7 +31,6 @@ public class Enemy extends Entity {
 
     @Override
     void checkIsAlive() {
-//        Log.d(TAG, "checkIsAlive: " + "(" + x +  " > " + canvas.getHeight() + ")");
         if (this.y > canvas.getHeight()){
             setToRemove(true);
         }
@@ -44,8 +42,6 @@ public class Enemy extends Entity {
                 if (temp1 != null && temp2 != null)
                     if (Rect.intersects(temp1, temp2)) {
                         removeEnemy(DrawCanvas.enemies.get(i), DrawCanvas.bullets.get(j));
-//                    DrawCanvas.enemies.get(i).setToRemove(true);
-//                    Log.d(TAG, "checkIsAlive: remove!");
                     }
             }
         }

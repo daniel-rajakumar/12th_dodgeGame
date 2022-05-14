@@ -59,9 +59,6 @@ public class DrawCanvas {
 
 
     public void updateBullets(){
-//        enemies.removeIf(enemy -> enemy.y == canvas.getHeight());
-//        enemies.removeIf(Enemy::isToRemove);
-
         for (int i = 0; i < bullets.size(); i++)
             if (bullets.get(i).isToRemove())
                 bullets.remove(i);
@@ -71,13 +68,9 @@ public class DrawCanvas {
             bullets.get(i).update();
         }
 
-//        Log.d(TAG, "updateEnemies: " + enemies.size());
     }
 
     public void updateEnemies(){
-//        enemies.removeIf(enemy -> enemy.y == canvas.getHeight());
-//        enemies.removeIf(Enemy::isToRemove);
-
         for (int i = 0; i < enemies.size(); i++)
             if (enemies.get(i).isToRemove())
                 enemies.remove(i);
@@ -86,8 +79,6 @@ public class DrawCanvas {
         for (int i = 0; i < enemies.size(); i++) {
             enemies.get(i).update();
         }
-
-//        Log.d(TAG, "updateEnemies: " + enemies.size());
     }
 
     public void fire(){

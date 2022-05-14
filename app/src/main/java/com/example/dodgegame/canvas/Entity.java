@@ -57,12 +57,10 @@ abstract public class Entity {
         this.sprite_width  = image.getWidth()/10;
         this.sprite_height = image.getHeight()/10;
     }
-//    public void setImage(int drawable, int sprite_y, int sprite_x_max) {
+
     public void setImage(Direction direction) {
         if (this instanceof Player) this.image = sprites.get("player");
         if (this instanceof Enemy ) this.image = sprites.get("enemy");
-//        Log.d(TAG, "setImage: " + (this instanceof Player)+ this );
-//        Log.d(TAG, "setImage: " + (sprites));
 
         switch (direction){
             case LEFT:   this.sprite_x_max = 8; sprite_y = 9;  break;
@@ -122,9 +120,6 @@ abstract public class Entity {
     abstract void checkIsAlive();
 
     void update(){
-//        if (!isPerformingAction()) {
-//            count++;
-//        }
         if (!isPerformingAction()) {
             count++;
             move();
@@ -154,7 +149,6 @@ abstract public class Entity {
 
     void moveLeft(){
         if (x - moveSpeed < 0) {
-//            this.x=0;
             return;
         }
         x -= moveSpeed;
@@ -162,7 +156,6 @@ abstract public class Entity {
 
     void moveRight(){
         if ((x + (sprite_width - sprite_width/4) * 2) + moveSpeed > canvas.getWidth()) {
-//            this.x = canvas.getWidth() - (sprite_width - (sprite_width/4)) * 2;
             return;
         }
         x += moveSpeed;
@@ -190,19 +183,6 @@ abstract public class Entity {
     public void setCollision(Rect collision) {
         if (collision != null)
             this.collision = collision;
-    }
-
-    void fallDown(){
-        sprite_y = 20;
-        sprite_x_max = 6;
-//        final int[] count = {0};
-//        Timer timer = new Timer();
-//        timer.schedule(new TimerTask() {
-//            public void run() {
-//                count[0]++;
-//            }
-//        }, 0, 1000);
-
     }
 
     public boolean isToRemove() {
