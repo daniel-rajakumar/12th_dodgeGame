@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.util.Log;
 
 import androidx.core.content.res.ResourcesCompat;
 
@@ -92,12 +93,20 @@ public class DrawCanvas {
     }
 
     public void background(){
+        int width = (player.entity_width/4);
+        int min = -width;
+        int max = canvas.getWidth() - (width * 3);
+        int offset = player.entity_height;
+
         new Timer().schedule(new TimerTask() {
             public void run() {
-                    float rand = new Random().nextFloat();
-                    enemies.push(new Enemy(context, canvas, player.x_per(rand), player.y_per(-0.2)));
+                    enemies.push(new Enemy(context, canvas, random(min, max),-offset * 2));
             }
         }, 0, 1000);
+    }
+
+    int random(int min, int max){
+        return (int) (Math. random()*(max-min+1))+min;
     }
 
 }

@@ -14,7 +14,7 @@ public class Enemy extends Entity {
     Enemy(Context context, Canvas canvas, int x, int y){
         super(context, canvas);
         setImage(Direction.BOTTOM, 3f);
-        setMoveSpeed(5);
+        setMoveSpeed(15);
         setLocation_byPixel(x, y);
         direction = Direction.BOTTOM;
     }
@@ -75,11 +75,12 @@ public class Enemy extends Entity {
 
         if (entity instanceof Player){
             DrawCanvas.score--;
+             ((Player) entity).damagePlayer();
         } else if (entity instanceof Bullet){
             DrawCanvas.score++;
+            entity.setToRemove(true);
         }
 
-        entity.setToRemove(true);
         enemy.setHasTouched(true);
         dieAnimation(enemy);
     }

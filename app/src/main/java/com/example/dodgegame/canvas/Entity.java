@@ -31,7 +31,7 @@ abstract public class Entity {
     int sprite_x_max, sprite_x, sprite_y;
     int count;
     Rect collision;
-    boolean toRemove, hasTouched, performingAction;
+    boolean toRemove, isDamaged, hasTouched, performingAction;
     static Map<String, Bitmap> images = new HashMap<>();
     Bitmap image;
     float scaler;
@@ -53,9 +53,16 @@ abstract public class Entity {
         this.entity_height = (int) (sprite_height * scaler);
     }
 
+    public void setImage(Bitmap image) {
+        this.image = image;
+    }
+
     public void setImage(Direction direction, float scaler) {
         this.scaler = scaler;
-        if (this instanceof Player) this.image = images.get("player");
+        if (this instanceof Player) {
+            if (isDamaged) this.image = images.get("enemy");
+            else           this.image = images.get("player");
+        }
         if (this instanceof Enemy ) this.image = images.get("enemy");
 
         switch (direction){
@@ -65,7 +72,6 @@ abstract public class Entity {
             case TOP:    this.sprite_x_max = 8; sprite_y = 8; break;
         }
 
-        assert image != null;
         this.sprite_width  = (image.getWidth()  / 13);
         this.sprite_height = (image.getHeight() / 21);
         this.entity_width = (int) (sprite_width * scaler);
@@ -155,16 +161,18 @@ abstract public class Entity {
     }
 
     void moveLeft(){
-        if (x - moveSpeed < 0) {
-            return;
-        }
+        int width = (this.entity_width/4);
+        if (x + width < x_per(0)) return;
+
         x -= moveSpeed;
     }
 
     void moveRight(){
-        if ((x + (sprite_width - sprite_width/4) * 2) + moveSpeed > canvas.getWidth()) {
+        int width = (this.entity_width/4);
+        if (x + (width * 3) > x_per(1)){
             return;
         }
+
         x += moveSpeed;
     }
 
@@ -233,5 +241,13 @@ abstract public class Entity {
 
         if (growing) scaler+=increase;
         else         scaler-=increase;
+    }
+
+    public void setDamaged(boolean damaged) {
+        isDamaged = damaged;
+    }
+
+    public boolean isDamaged() {
+        return isDamaged;
     }
 }

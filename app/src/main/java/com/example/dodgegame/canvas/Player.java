@@ -16,16 +16,20 @@ import java.util.TimerTask;
 
 public class Player extends Entity implements SensorEventListener2 {
     private static final String TAG = "testing";
+    Timer damageCoolDown;
 
     Player(Context context, Canvas canvas){
         super(context, canvas);
         setImage(Direction.TOP, 3f);
-        setMoveSpeed(5);
+        setMoveSpeed(15);
         setLocation_byPercentage(0.5f, 0.8f);
+        setDamaged(false);
 
         SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         Sensor accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener(this, accelerometerSensor, sensorManager.SENSOR_DELAY_NORMAL);
+
+        damageCoolDown = new Timer();
     }
 
     @Override
@@ -47,14 +51,25 @@ public class Player extends Entity implements SensorEventListener2 {
     }
 
     void damagePlayer(){
-//        setImage(Direction.TOP, 3f);
+        setDamaged(true);
+        Log.d(TAG, "damagePlayer: " + "yes");
+
+        damageCoolDown.cancel();
+        damageCoolDown = new Timer();
+        damageCoolDown.schedule(new TimerTask() {
+            public void run() {
+                DrawCanvas.player.setDamaged(false);
+            }
+        }, 5000, 1);
     }
 
     @Override
     void checkIsAlive() {
-        if (toRemove){
-            damagePlayer();
-        }
+    }
+    //wait 0 ms before doing the action and do it evry 1000ms (1second)
+//        if (isDamaged){
+//            damagePlayer();
+//        }
 
 //        for (int i = 0; i < DrawCanvas.enemies.size(); i++){
 //            Rect temp2 = DrawCanvas.enemies.get(i).collision;
@@ -64,7 +79,6 @@ public class Player extends Entity implements SensorEventListener2 {
 //                    damagePlayer(DrawCanvas.enemies.get(i));
 //                }
 //        }
-    }
 
 //    void damagePlayer(Enemy enemy){
 //
