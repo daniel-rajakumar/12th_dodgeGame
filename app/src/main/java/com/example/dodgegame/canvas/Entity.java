@@ -12,6 +12,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener2;
 import android.hardware.SensorManager;
+import android.media.audiofx.PresetReverb;
 import android.util.Log;
 import android.widget.Switch;
 
@@ -229,5 +230,18 @@ abstract public class Entity {
 
     public void setScaler(float scaler) {
         this.scaler = scaler;
+    }
+
+    boolean growing = true;
+    public void increaseScale(float increase, float max){
+        if (scaler > max) {
+            growing = false;
+        }
+        if (scaler*1.1 < max){
+            growing = true;
+        }
+
+        if (growing) scaler+=increase;
+        else         scaler-=increase;
     }
 }
