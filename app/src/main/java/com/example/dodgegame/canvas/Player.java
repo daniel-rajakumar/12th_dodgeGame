@@ -58,7 +58,7 @@ public class Player extends Entity implements SensorEventListener2 {
         damageCoolDown = new Timer();
         damageCoolDown.schedule(new TimerTask() {
             public void run() {
-                DrawCanvas.player.setDamaged(false);
+                setDamaged(false);
             }
         }, 5000, 1);
     }
@@ -96,7 +96,7 @@ public class Player extends Entity implements SensorEventListener2 {
 
     @Override
     public void fire() {
-        if (isPerformingAction()) return;
+        if (isPerformingAction() || isDamaged()) return;
         setPerformingAction(true);
 
         this.direction = Direction.NONE;
