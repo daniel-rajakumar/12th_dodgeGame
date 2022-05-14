@@ -10,11 +10,12 @@ import java.util.TimerTask;
 public class Enemy extends Entity {
     private static final String TAG = "testing";
 
-    Enemy(Context context, Canvas canvas, float x){
+    Enemy(Context context, Canvas canvas, int x, int y){
         super(context, canvas);
         setImage(Direction.BOTTOM);
         setMoveSpeed(5);
-        setLocation_byPercentage(x, 0);
+//        setLocation_byPercentage(x, 0.7f);
+        setLocation_byPixel(x, y);
         direction = Direction.BOTTOM;
     }
 
@@ -42,7 +43,7 @@ public class Enemy extends Entity {
                 Rect temp1 = DrawCanvas.bullets.get(j).collision;
                 if (temp1 != null && temp2 != null)
                     if (Rect.intersects(temp1, temp2)) {
-                        removeEnemy(DrawCanvas.enemies.get(i));
+                        removeEnemy(DrawCanvas.enemies.get(i), DrawCanvas.bullets.get(j));
 //                    DrawCanvas.enemies.get(i).setToRemove(true);
 //                    Log.d(TAG, "checkIsAlive: remove!");
                     }
@@ -55,9 +56,9 @@ public class Enemy extends Entity {
 
     }
 
-    void removeEnemy(Enemy enemy){
+    void removeEnemy(Enemy enemy, Bullet bullet){
         if (enemy.isHasTouched()) return;
-
+        bullet.setToRemove(true);
         enemy.setHasTouched(true);
         enemy.direction = Direction.NONE;
         enemy.sprite_x = 0;

@@ -13,7 +13,7 @@ public class Bullet extends Entity {
     Bullet(Context context, Canvas canvas, int x, int y){
         super(context, canvas);
         setImageBullet();
-        setMoveSpeed(10);
+        setMoveSpeed(1);
         direction = Direction.TOP;
         setLocation_byPixel(x, y);
     }
@@ -42,21 +42,22 @@ public class Bullet extends Entity {
 
     @Override
     void checkIsAlive() {
-//        Log.d(TAG, "checkIsAlive: " + "(" + x +  " > " + canvas.getHeight() + ")");
-        if (this.y > canvas.getHeight()){
+////        Log.d(TAG, "checkIsAlive: " + "(" + x +  " > " + canvas.getHeight() + ")");
+        if (this.y < 0){
             setToRemove(true);
         }
-
-        for (int i = 0; i < DrawCanvas.enemies.size(); i++){
-            Rect temp2 = DrawCanvas.enemies.get(i).collision;
-            Rect temp1 = DrawCanvas.player.collision;
-            if (temp1 != null && temp2 != null)
-                if (Rect.intersects(temp1, temp2)) {
-//                    removeEnemy(DrawCanvas.enemies.get(i));
-//                    DrawCanvas.enemies.get(i).setToRemove(true);
-//                    Log.d(TAG, "checkIsAlive: remove!");
-                }
-        }
+//
+//        for (int i = 0; i < DrawCanvas.enemies.size(); i++){
+//            Rect temp2 = DrawCanvas.enemies.get(i).collision;
+//            Rect temp1 = DrawCanvas.player.collision;
+//            if (temp1 != null && temp2 != null)
+//                if (Rect.intersects(temp1, temp2)) {
+//                    DrawCanvas.bullets.remove();
+//                    removeBullet(DrawCanvas.bullets.get(i));
+////                    DrawCanvas.enemies.get(i).setToRemove(true);
+////                    Log.d(TAG, "checkIsAlive: remove!");
+//                }
+//        }
     }
 
     @Override
@@ -64,23 +65,24 @@ public class Bullet extends Entity {
 
     }
 
-    void removeEnemy(Bullet enemy){
-        if (enemy.isHasTouched()) return;
-
-        enemy.setHasTouched(true);
-        enemy.direction = Direction.NONE;
-        enemy.sprite_x = 0;
-        enemy.sprite_x_max = 5;
-        enemy.sprite_y = 20;
-
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (++enemy.sprite_x <= enemy.sprite_x_max) return;
-                enemy.setToRemove(true);
-                cancel();
-            }
-        }, 500, 500);
+    void removeBullet(Bullet bullet){
+        bullet.setToRemove(true);
+//        if (enemy.isHasTouched()) return;
+//
+//        enemy.setHasTouched(true);
+//        enemy.direction = Direction.NONE;
+//        enemy.sprite_x = 0;
+//        enemy.sprite_x_max = 5;
+//        enemy.sprite_y = 20;
+//
+//        new Timer().schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                if (++enemy.sprite_x <= enemy.sprite_x_max) return;
+//                enemy.setToRemove(true);
+//                cancel();
+//            }
+//        }, 500, 500);
     }
 
 

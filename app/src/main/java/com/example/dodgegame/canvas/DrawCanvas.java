@@ -36,7 +36,6 @@ public class DrawCanvas {
     static LinkedList<Bullet> bullets = new LinkedList<>();
     Context context;
     Canvas canvas;
-    Timer timer;
 
     static boolean start = true, end = false;
     static boolean gameRunning = true;
@@ -96,10 +95,10 @@ public class DrawCanvas {
     }
 
     public void background(){
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
+        new Timer().schedule(new TimerTask() {
             public void run() {
-                    enemies.push(new Enemy(context, canvas, new Random().nextFloat()));
+                    float rand = new Random().nextFloat();
+                    enemies.push(new Enemy(context, canvas, player.x_per(rand), 0));
             }
         }, 0, 1000);
     }
