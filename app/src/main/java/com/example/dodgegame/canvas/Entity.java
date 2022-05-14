@@ -52,6 +52,11 @@ abstract public class Entity {
         performingAction = false;
     }
 
+    public void setImageBullet(){
+        this.image = sprites.get("bullet");
+        this.sprite_width  = image.getWidth()/10;
+        this.sprite_height = image.getHeight()/10;
+    }
 //    public void setImage(int drawable, int sprite_y, int sprite_x_max) {
     public void setImage(Direction direction) {
         if (this instanceof Player) this.image = sprites.get("player");
@@ -74,12 +79,18 @@ abstract public class Entity {
     static void loadAllSpites(Context context){
         sprites.put("player", BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_player));
         sprites.put("enemy",  BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_enemy));
+        sprites.put("bullet",  BitmapFactory.decodeResource(context.getResources(), R.drawable.bullet));
     }
 
 
-    void setLocation(float x, float y){
+    void setLocation_byPercentage(float x, float y){
         this.x = x_per(x);
         this.y = y_per(y);
+    }
+
+    void setLocation_byPixel(int x, int y){
+        this.x = x;
+        this.y = y;
     }
 
     public void setDrawable(int drawable) {
@@ -89,14 +100,21 @@ abstract public class Entity {
     void draw(){
         canvas.save();
         canvas.translate(x, y);
-        canvas.scale(3f, 3f);
-        canvas.drawBitmap(
-                Bitmap.createBitmap(this.image
-                        , (sprite_width/4) + (sprite_width *  (1 + sprite_x))
-                        , (sprite_height/4) + (sprite_height * sprite_y)
-                        , sprite_width -  (sprite_width/4)
-                        , sprite_height - (sprite_height/4))
-                , new Matrix(), null);
+
+        if (this instanceof Bullet) {
+            canvas.scale(.1f, .1f);
+            canvas.drawBitmap(image, new Matrix(), null);
+        } else {
+            canvas.scale(3f, 3f);
+            canvas.drawBitmap(
+                    Bitmap.createBitmap(this.image
+                            , (sprite_width/4) + (sprite_width *  (1 + sprite_x))
+                            , (sprite_height/4) + (sprite_height * sprite_y)
+                            , sprite_width -  (sprite_width/4)
+                            , sprite_height - (sprite_height/4))
+                    , new Matrix(), null);
+
+        }
         canvas.restore();
     }
 
@@ -114,16 +132,16 @@ abstract public class Entity {
         draw();
 
         checkIsAlive();
-//        showCollision();
-        if (!isPerformingAction()){
+        showCollision();
+        if (!(this instanceof Bullet))
+            if (!isPerformingAction()){
+                if (!isHasTouched()){
+                    if (count % 10 == 0)
+                        sprite_x++;
 
-            if (!isHasTouched()){
-                if (count % 10 == 0)
-                    sprite_x++;
-
-                sprite_x %= sprite_x_max;
+                    sprite_x %= sprite_x_max;
+                }
             }
-        }
     }
 
 

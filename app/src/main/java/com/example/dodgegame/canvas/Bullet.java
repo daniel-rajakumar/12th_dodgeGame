@@ -10,23 +10,27 @@ import java.util.TimerTask;
 public class Bullet extends Entity {
     private static final String TAG = "testing";
 
-    Bullet(Context context, Canvas canvas, float x){
+    Bullet(Context context, Canvas canvas, int x, int y){
         super(context, canvas);
-        setImage(Direction.BOTTOM);
+        setImageBullet();
         setMoveSpeed(5);
-        setLocation(x, 0);
-        direction = Direction.BOTTOM;
+        direction = Direction.TOP;
+        setLocation_byPixel(x, y);
     }
 
     @Override
     void move() {
-        if (direction == Direction.BOTTOM) moveBottom();
+        if (direction == Direction.TOP) moveTop();
 
         setCollision(new Rect(
                 this.x + (this.sprite_width/2),
                 this.y + this.sprite_height,
                 (this.x + (this.sprite_width/2)) + this.sprite_width/2,
                 this.y + this.sprite_height * 2));
+    }
+
+    private void moveTop() {
+        this.y--;
     }
 
     @Override

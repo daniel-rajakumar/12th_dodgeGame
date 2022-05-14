@@ -55,8 +55,25 @@ public class DrawCanvas {
         canvas.drawRGB(0,0,0);
         updateEnemies();
         player.update();
+        updateBullets();
     }
 
+
+    public void updateBullets(){
+//        enemies.removeIf(enemy -> enemy.y == canvas.getHeight());
+//        enemies.removeIf(Enemy::isToRemove);
+
+        for (int i = 0; i < bullets.size(); i++)
+            if (bullets.get(i).isToRemove())
+                bullets.remove(i);
+
+
+        for (int i = 0; i < bullets.size(); i++) {
+            bullets.get(i).update();
+        }
+
+//        Log.d(TAG, "updateEnemies: " + enemies.size());
+    }
 
     public void updateEnemies(){
 //        enemies.removeIf(enemy -> enemy.y == canvas.getHeight());

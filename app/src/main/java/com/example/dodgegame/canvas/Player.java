@@ -1,22 +1,13 @@
 package com.example.dodgegame.canvas;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener2;
 import android.hardware.SensorManager;
 import android.util.Log;
-import android.widget.Switch;
-
-import com.example.dodgegame.GameSurface;
-import com.example.dodgegame.R;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -28,7 +19,7 @@ public class Player extends Entity implements SensorEventListener2 {
         super(context, canvas);
         setImage(Direction.TOP);
         setMoveSpeed(5);
-        setLocation(0.5f, 0.8f);
+        setLocation_byPercentage(0.5f, 0.8f);
 
         SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         Sensor accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -49,7 +40,7 @@ public class Player extends Entity implements SensorEventListener2 {
     }
 
     void fireBullet(){
-
+        DrawCanvas.bullets.push(new Bullet(context, canvas, x, y));
     }
 
     @Override

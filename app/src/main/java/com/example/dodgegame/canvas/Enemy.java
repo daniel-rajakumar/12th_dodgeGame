@@ -3,15 +3,7 @@ package com.example.dodgegame.canvas;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener2;
-import android.hardware.SensorManager;
-import android.util.Log;
 
-import com.example.dodgegame.R;
-
-import java.sql.Struct;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -22,7 +14,7 @@ public class Enemy extends Entity {
         super(context, canvas);
         setImage(Direction.BOTTOM);
         setMoveSpeed(5);
-        setLocation(x, 0);
+        setLocation_byPercentage(x, 0);
         direction = Direction.BOTTOM;
     }
 
@@ -45,14 +37,16 @@ public class Enemy extends Entity {
         }
 
         for (int i = 0; i < DrawCanvas.enemies.size(); i++){
-            Rect temp2 = DrawCanvas.enemies.get(i).collision;
-            Rect temp1 = DrawCanvas.player.collision;
-            if (temp1 != null && temp2 != null)
-                if (Rect.intersects(temp1, temp2)) {
-                    removeEnemy(DrawCanvas.enemies.get(i));
+            for (int j = 0; j < DrawCanvas.bullets.size(); j++) {
+                Rect temp2 = DrawCanvas.enemies.get(i).collision;
+                Rect temp1 = DrawCanvas.bullets.get(j).collision;
+                if (temp1 != null && temp2 != null)
+                    if (Rect.intersects(temp1, temp2)) {
+                        removeEnemy(DrawCanvas.enemies.get(i));
 //                    DrawCanvas.enemies.get(i).setToRemove(true);
 //                    Log.d(TAG, "checkIsAlive: remove!");
-                }
+                    }
+            }
         }
     }
 
