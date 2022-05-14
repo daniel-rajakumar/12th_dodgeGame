@@ -64,6 +64,8 @@ public class Enemy extends Entity {
 
     void removeEnemy(Enemy enemy, Bullet bullet){
         if (enemy.isHasTouched()) return;
+        DrawCanvas.score++;
+
         bullet.setToRemove(true);
         enemy.setHasTouched(true);
         enemy.direction = Direction.NONE;

@@ -1,33 +1,19 @@
 package com.example.dodgegame.canvas;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Point;
-import android.graphics.Rect;
-import android.graphics.Typeface;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener2;
-import android.util.Log;
-import android.view.Display;
+
+import androidx.core.content.res.ResourcesCompat;
 
 import com.example.dodgegame.R;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.stream.IntStream;
 
 public class DrawCanvas {
     private static final String TAG = "Test";
@@ -39,6 +25,7 @@ public class DrawCanvas {
     Canvas canvas;
     static int score;
     static int time;
+    int fontSize = 100;
 
     static boolean start = true, end = false;
     static boolean gameRunning = true;
@@ -49,7 +36,7 @@ public class DrawCanvas {
 
         if (start){
             start = false;
-            Entity.loadAllSpites(context);
+            Entity.loadAllImages(context);
             player = new Player(context, canvas);
             background();
         }
@@ -58,6 +45,7 @@ public class DrawCanvas {
         updateEnemies();
         updateBullets();
         player.update();
+        updateGrass();
         updateScore();
     }
 
@@ -85,12 +73,21 @@ public class DrawCanvas {
         }
     }
 
+    void updateGrass(){
+        canvas.drawBitmap(Entity.images.get("grass"), 0, player.y_per(-0.1), null);
+    }
+
     void updateScore(){
         Paint paint = new Paint();
         paint.setColor(Color.RED);
-        paint.setTextSize(100);
-        paint.setTypeface(Typeface.createFromAsset(getAssets(), "ChopinScript.ttf"));
-        canvas.drawText("hello", 500, 500,paint);
+        paint.setTextSize(fontSize);
+        paint.setTypeface(ResourcesCompat.getFont(context, R.font.font_1));
+
+        String text = String.valueOf(score);
+        canvas.drawText(text,
+                player.x_per(0.95) - (text.length() * fontSize),
+                player.y_per(0.075),
+                paint);
 
     }
 

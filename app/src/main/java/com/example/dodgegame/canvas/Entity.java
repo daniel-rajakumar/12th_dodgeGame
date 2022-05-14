@@ -8,22 +8,11 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener2;
-import android.hardware.SensorManager;
-import android.media.audiofx.PresetReverb;
-import android.util.Log;
-import android.widget.Switch;
 
 import com.example.dodgegame.R;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 enum Direction {
     RIGHT, LEFT, TOP, BOTTOM, NONE
@@ -43,7 +32,7 @@ abstract public class Entity {
     int count;
     Rect collision;
     boolean toRemove, hasTouched, performingAction;
-    static Map<String, Bitmap> sprites = new HashMap<>();
+    static Map<String, Bitmap> images = new HashMap<>();
     Bitmap image;
     float scaler;
 
@@ -57,7 +46,7 @@ abstract public class Entity {
 
     public void setImageBullet(float scaler){
         this.scaler = scaler;
-        this.image = sprites.get("bullet");
+        this.image = images.get("bullet");
         this.sprite_width  = image.getWidth()/10;
         this.sprite_height = image.getHeight()/10;
         this.entity_width = (int) (sprite_width * scaler);
@@ -66,8 +55,8 @@ abstract public class Entity {
 
     public void setImage(Direction direction, float scaler) {
         this.scaler = scaler;
-        if (this instanceof Player) this.image = sprites.get("player");
-        if (this instanceof Enemy ) this.image = sprites.get("enemy");
+        if (this instanceof Player) this.image = images.get("player");
+        if (this instanceof Enemy ) this.image = images.get("enemy");
 
         switch (direction){
             case LEFT:   this.sprite_x_max = 8; sprite_y = 9;  break;
@@ -83,10 +72,11 @@ abstract public class Entity {
         this.entity_height = (int) (sprite_height * scaler);
     }
 
-    static void loadAllSpites(Context context){
-        sprites.put("player", BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_player));
-        sprites.put("enemy",  BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_enemy));
-        sprites.put("bullet",  BitmapFactory.decodeResource(context.getResources(), R.drawable.bullet));
+    static void loadAllImages(Context context){
+        images.put("player", BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_player));
+        images.put("enemy",  BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_enemy));
+        images.put("bullet",  BitmapFactory.decodeResource(context.getResources(), R.drawable.bullet));
+        images.put("grass",  BitmapFactory.decodeResource(context.getResources(), R.drawable.grass));
     }
 
 
