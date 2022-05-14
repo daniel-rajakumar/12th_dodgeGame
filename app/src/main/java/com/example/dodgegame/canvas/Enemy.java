@@ -17,7 +17,6 @@ import java.util.TimerTask;
 
 public class Enemy extends Entity {
     private static final String TAG = "testing";
-    private boolean toRemove;
 
     Enemy(Context context, Canvas canvas, float x){
         super(context, canvas);
@@ -55,6 +54,11 @@ public class Enemy extends Entity {
 //                    Log.d(TAG, "checkIsAlive: remove!");
                 }
         }
+    }
+
+    @Override
+    public void fire() {
+
     }
 
     void removeEnemy(Enemy enemy){

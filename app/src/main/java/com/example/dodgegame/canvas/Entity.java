@@ -40,14 +40,16 @@ abstract public class Entity {
     int sprite_x_max, sprite_x, sprite_y;
     int count;
     Rect collision;
-    boolean toRemove, hasTouched;
+    boolean toRemove, hasTouched, performingAction;
     static Map<String, Bitmap> sprites = new HashMap<>();
     Bitmap image;
+
 
     public Entity(Context context, Canvas canvas) {
         this.canvas = canvas;
         this.context = context;
         toRemove = false;
+        performingAction = false;
     }
 
 //    public void setImage(int drawable, int sprite_y, int sprite_x_max) {
@@ -102,18 +104,25 @@ abstract public class Entity {
     abstract void checkIsAlive();
 
     void update(){
-        count++;
-        move();
+//        if (!isPerformingAction()) {
+//            count++;
+//        }
+        if (!isPerformingAction()) {
+            count++;
+            move();
+        }
         draw();
-//        showCollision();
+
         checkIsAlive();
+//        showCollision();
+        if (!isPerformingAction()){
 
+            if (!isHasTouched()){
+                if (count % 10 == 0)
+                    sprite_x++;
 
-        if (!isHasTouched()){
-            if (count % 10 == 0)
-                sprite_x++;
-
-            sprite_x %= sprite_x_max;
+                sprite_x %= sprite_x_max;
+            }
         }
     }
 
@@ -192,5 +201,15 @@ abstract public class Entity {
 
     public boolean isHasTouched() {
         return hasTouched;
+    }
+
+    public abstract void fire();
+
+    public boolean isPerformingAction() {
+        return performingAction;
+    }
+
+    public void setPerformingAction(boolean performingAction) {
+        this.performingAction = performingAction;
     }
 }

@@ -15,7 +15,11 @@ import android.hardware.SensorManager;
 import android.util.Log;
 import android.widget.Switch;
 
+import com.example.dodgegame.GameSurface;
 import com.example.dodgegame.R;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Player extends Entity implements SensorEventListener2 {
     private static final String TAG = "testing";
@@ -41,6 +45,31 @@ public class Player extends Entity implements SensorEventListener2 {
 
     @Override
     void checkIsAlive() {
+
+    }
+
+    @Override
+    public void fire() {
+        if (isPerformingAction()) return;
+        setPerformingAction(true);
+
+        this.direction = Direction.NONE;
+        this.sprite_x = 0;
+        this.sprite_x_max = 4;
+        this.sprite_y = 12;
+
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Log.d(TAG, "fire: sprite_x: " + sprite_x + " | x_max: " + sprite_x_max);
+                sprite_x++;
+                if (sprite_x < sprite_x_max) return;
+                Log.d(TAG, "fire: cancel");
+                setPerformingAction(false);
+                cancel();
+            }
+        }, 0, 200);
+        Log.d(TAG, "fire: Hello world");
 
     }
 
@@ -76,7 +105,8 @@ public class Player extends Entity implements SensorEventListener2 {
         }
 
 //        Log.d(TAG, "onSensorChanged: " + direction);
-        setImage(direction);
+        if (!isPerformingAction())
+            setImage(direction);
     }
 
     @Override

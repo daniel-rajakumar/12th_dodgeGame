@@ -31,7 +31,7 @@ import java.util.stream.IntStream;
 public class DrawCanvas {
     private static final String TAG = "Test";
     int i = 0;
-    static Player player;
+    public static Player player;
     static LinkedList<Enemy> enemies = new LinkedList<>();
     static LinkedList<Enemy> bullets = new LinkedList<>();
     Context context;
@@ -60,13 +60,22 @@ public class DrawCanvas {
 
     public void updateEnemies(){
 //        enemies.removeIf(enemy -> enemy.y == canvas.getHeight());
-        enemies.removeIf(Enemy::isToRemove);
+//        enemies.removeIf(Enemy::isToRemove);
+
+        for (int i = 0; i < enemies.size(); i++)
+            if (enemies.get(i).isToRemove())
+                enemies.remove(i);
+
 
         for (int i = 0; i < enemies.size(); i++) {
             enemies.get(i).update();
         }
 
 //        Log.d(TAG, "updateEnemies: " + enemies.size());
+    }
+
+    public void fire(){
+
     }
 
     public void background(){

@@ -24,8 +24,13 @@ public class GameSurface extends SurfaceView implements Runnable {
     public GameSurface(Context context) {
         super(context);
         this.surfaceHolder = getHolder();
+        setUpTouch();
+    }
+
+    void setUpTouch() {
         setOnTouchListener((view, motionEvent) -> {
-            Log.d(TAG, "GameSurface: " + "touch");
+            performClick();
+            DrawCanvas.player.fire();
             return false;
         });
     }
