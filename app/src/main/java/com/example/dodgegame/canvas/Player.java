@@ -33,13 +33,42 @@ public class Player extends Entity implements SensorEventListener2 {
         if (direction == Direction.RIGHT) moveRight();
         if (direction == Direction.LEFT)  moveLeft();
 
-        updateCollision();
+//        updateCollision();
+
+        int width = (this.entity_width/4);
+        int height = (this.entity_height/4);
+
+        setCollision(new Rect(
+                this.x + (width),
+                this.y + (height),
+                this.x + (width * 3),
+                this.y + (height * 8)/3
+        ));
+    }
+
+    void damagePlayer(){
+//        setImage(Direction.TOP, 3f);
     }
 
     @Override
     void checkIsAlive() {
+        if (toRemove){
+            damagePlayer();
+        }
 
+//        for (int i = 0; i < DrawCanvas.enemies.size(); i++){
+//            Rect temp2 = DrawCanvas.enemies.get(i).collision;
+//            Rect temp1 = collision;
+//            if (temp1 != null && temp2 != null)
+//                if (Rect.intersects(temp1, temp2)) {
+//                    damagePlayer(DrawCanvas.enemies.get(i));
+//                }
+//        }
     }
+
+//    void damagePlayer(Enemy enemy){
+//
+//    }
 
     void fireBullet(){
         int width = (this.entity_width/2);

@@ -46,14 +46,22 @@ public class Enemy extends Entity {
         }
 
         for (int i = 0; i < DrawCanvas.enemies.size(); i++){
+            Rect temp1 = DrawCanvas.enemies.get(i).collision;
+
             for (int j = 0; j < DrawCanvas.bullets.size(); j++) {
-                Rect temp2 = DrawCanvas.enemies.get(i).collision;
-                Rect temp1 = DrawCanvas.bullets.get(j).collision;
+                Rect temp2 = DrawCanvas.bullets.get(j).collision;
+
                 if (temp1 != null && temp2 != null)
                     if (Rect.intersects(temp1, temp2)) {
                         removeEnemy(DrawCanvas.enemies.get(i), DrawCanvas.bullets.get(j));
                     }
             }
+
+            Rect temp3 = DrawCanvas.player.collision;
+            if (temp1 != null && temp3 != null)
+                if (Rect.intersects(temp1, temp3)) {
+                    removeEnemy(DrawCanvas.enemies.get(i), DrawCanvas.player);
+                }
         }
     }
 
@@ -62,12 +70,21 @@ public class Enemy extends Entity {
 
     }
 
-    void removeEnemy(Enemy enemy, Bullet bullet){
+    void removeEnemy(Enemy enemy, Entity entity){
         if (enemy.isHasTouched()) return;
-        DrawCanvas.score++;
 
-        bullet.setToRemove(true);
+        if (entity instanceof Player){
+            DrawCanvas.score--;
+        } else if (entity instanceof Bullet){
+            DrawCanvas.score++;
+        }
+
+        entity.setToRemove(true);
         enemy.setHasTouched(true);
+        dieAnimation(enemy);
+    }
+
+    void dieAnimation(Enemy enemy){
         enemy.direction = Direction.NONE;
         enemy.sprite_x = 0;
         enemy.sprite_x_max = 5;
@@ -81,8 +98,8 @@ public class Enemy extends Entity {
                 cancel();
             }
         }, 500, 500);
-    }
 
+    }
 
 
 
