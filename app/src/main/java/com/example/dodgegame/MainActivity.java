@@ -1,5 +1,9 @@
 package com.example.dodgegame;
 
+/**
+ * TODO: fix enemy spamming on middle of screen.
+ */
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
