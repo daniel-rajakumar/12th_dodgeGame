@@ -9,6 +9,8 @@ import android.hardware.SensorEventListener2;
 import android.hardware.SensorManager;
 import android.util.Log;
 
+import com.example.dodgegame.GameSurface;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -17,7 +19,7 @@ public class Player extends Entity implements SensorEventListener2 {
 
     Player(Context context, Canvas canvas){
         super(context, canvas);
-        setImage(Direction.TOP);
+        setImage(Direction.TOP, 3f);
         setMoveSpeed(5);
         setLocation_byPercentage(0.5f, 0.8f);
 
@@ -40,7 +42,13 @@ public class Player extends Entity implements SensorEventListener2 {
     }
 
     void fireBullet(){
-        DrawCanvas.bullets.push(new Bullet(context, canvas, x + (sprite_width/2), y));
+        int width = (this.entity_width/2);
+        int height = (this.entity_height/2);
+
+        DrawCanvas.bullets.push(new Bullet(context, canvas
+                , (this.x + (width))
+                , this.y + (height)
+        ));
     }
 
     @Override
@@ -69,11 +77,21 @@ public class Player extends Entity implements SensorEventListener2 {
     }
 
     void updateCollision(){
+//        setCollision(new Rect(
+//                this.x + (this.sprite_width/2),
+//                this.y + this.sprite_height,
+//                (this.x + (this.sprite_width/2)) + this.sprite_width/2,
+//                this.y + this.sprite_height * 2));
+
+
+        int width = (this.entity_width/4);
+        int height = (this.entity_height/4);
+
         setCollision(new Rect(
-                this.x + (this.sprite_width/2),
-                this.y + this.sprite_height,
-                (this.x + (this.sprite_width/2)) + this.sprite_width/2,
-                this.y + this.sprite_height * 2));
+                this.x + (width),
+                this.y + (height),
+                this.x + (width * 3),
+                this.y + (height * 4)));
 
         for (int i = 0; i < DrawCanvas.enemies.size(); i++){
             Rect temp = DrawCanvas.enemies.get(i).collision;
@@ -98,7 +116,7 @@ public class Player extends Entity implements SensorEventListener2 {
         }
 
         if (!isPerformingAction())
-            setImage(direction);
+            setImage(direction, 3f);
     }
 
     @Override

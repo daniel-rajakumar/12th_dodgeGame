@@ -32,17 +32,19 @@ abstract public class Entity {
     private static final String TAG = "test";
     Canvas canvas;
     Context context;
-    int x, y;
-    int sprite_width, sprite_height;
     Direction direction;
     int moveSpeed;
     int drawable;
+    int x, y;
+    int sprite_width, sprite_height;
+    int entity_width, entity_height;
     int sprite_x_max, sprite_x, sprite_y;
     int count;
     Rect collision;
     boolean toRemove, hasTouched, performingAction;
     static Map<String, Bitmap> sprites = new HashMap<>();
     Bitmap image;
+    float scaler;
 
 
     public Entity(Context context, Canvas canvas) {
@@ -52,13 +54,17 @@ abstract public class Entity {
         performingAction = false;
     }
 
-    public void setImageBullet(){
+    public void setImageBullet(float scaler){
+        this.scaler = scaler;
         this.image = sprites.get("bullet");
         this.sprite_width  = image.getWidth()/10;
         this.sprite_height = image.getHeight()/10;
+        this.entity_width = (int) (sprite_width * scaler);
+        this.entity_height = (int) (sprite_height * scaler);
     }
 
-    public void setImage(Direction direction) {
+    public void setImage(Direction direction, float scaler) {
+        this.scaler = scaler;
         if (this instanceof Player) this.image = sprites.get("player");
         if (this instanceof Enemy ) this.image = sprites.get("enemy");
 
@@ -69,9 +75,11 @@ abstract public class Entity {
             case TOP:    this.sprite_x_max = 8; sprite_y = 8; break;
         }
 
-
-        this.sprite_width  = image.getWidth()  / 13;
-        this.sprite_height = image.getHeight() / 21;
+        assert image != null;
+        this.sprite_width  = (image.getWidth()  / 13);
+        this.sprite_height = (image.getHeight() / 21);
+        this.entity_width = (int) (sprite_width * scaler);
+        this.entity_height = (int) (sprite_height * scaler);
     }
 
     static void loadAllSpites(Context context){
@@ -98,20 +106,27 @@ abstract public class Entity {
     void draw(){
         canvas.save();
         canvas.translate(x, y);
+        canvas.scale(scaler, scaler);
 
         if (this instanceof Bullet) {
-            canvas.scale(.1f, .1f);
             canvas.drawBitmap(image, new Matrix(), null);
         } else {
-            canvas.scale(3f, 3f);
+//            canvas.drawBitmap(
+//                    Bitmap.createBitmap(this.image
+//                            , (sprite_width/4) + (sprite_width *  (1 + sprite_x))
+//                            , (sprite_height/4) + (sprite_height * sprite_y)
+//                            , sprite_width -  (sprite_width/4)
+//                            , sprite_height - (sprite_height/4))
+//                    , new Matrix(), null);
+//
+
             canvas.drawBitmap(
                     Bitmap.createBitmap(this.image
-                            , (sprite_width/4) + (sprite_width *  (1 + sprite_x))
-                            , (sprite_height/4) + (sprite_height * sprite_y)
-                            , sprite_width -  (sprite_width/4)
-                            , sprite_height - (sprite_height/4))
-                    , new Matrix(), null);
-
+                            , sprite_width * (1 + sprite_x)
+                            , sprite_height * sprite_y
+                            , sprite_width
+                            , sprite_height
+                    ), new Matrix(), null);
         }
         canvas.restore();
     }
@@ -143,6 +158,7 @@ abstract public class Entity {
     void showCollision(){
         Paint paint = new Paint();
         paint.setColor(Color.RED);
+        paint.setStyle(Paint.Style.STROKE);
 
         canvas.drawRect(collision, paint);
     }
@@ -209,5 +225,9 @@ abstract public class Entity {
 
     public void setPerformingAction(boolean performingAction) {
         this.performingAction = performingAction;
+    }
+
+    public void setScaler(float scaler) {
+        this.scaler = scaler;
     }
 }

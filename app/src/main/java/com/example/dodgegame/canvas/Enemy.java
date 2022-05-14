@@ -3,6 +3,7 @@ package com.example.dodgegame.canvas;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.util.Log;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -12,7 +13,7 @@ public class Enemy extends Entity {
 
     Enemy(Context context, Canvas canvas, int x, int y){
         super(context, canvas);
-        setImage(Direction.BOTTOM);
+        setImage(Direction.BOTTOM, 3f);
         setMoveSpeed(5);
         setLocation_byPixel(x, y);
         direction = Direction.BOTTOM;
@@ -22,11 +23,20 @@ public class Enemy extends Entity {
     void move() {
         if (direction == Direction.BOTTOM) moveBottom();
 
+//        setCollision(new Rect(
+//                this.x + (this.sprite_width/2),
+//                this.y + this.sprite_height,
+//                (this.x + (this.sprite_width/2)) + this.sprite_width/2,
+//                this.y + this.sprite_height * 2));
+        int width = (this.entity_width/4);
+        int height = (this.entity_height/4);
+
         setCollision(new Rect(
-                this.x + (this.sprite_width/2),
-                this.y + this.sprite_height,
-                (this.x + (this.sprite_width/2)) + this.sprite_width/2,
-                this.y + this.sprite_height * 2));
+                this.x + (width),
+                this.y + (height),
+                this.x + (width * 3),
+                this.y + (height * 8)/3
+        ));
     }
 
     @Override
