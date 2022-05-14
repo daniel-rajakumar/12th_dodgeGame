@@ -48,6 +48,10 @@ public class Player extends Entity implements SensorEventListener2 {
 
     }
 
+    void fireBullet(){
+
+    }
+
     @Override
     public void fire() {
         if (isPerformingAction()) return;
@@ -58,12 +62,12 @@ public class Player extends Entity implements SensorEventListener2 {
         this.sprite_x_max = 4;
         this.sprite_y = 12;
 
+        fireBullet();
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
                 Log.d(TAG, "fire: sprite_x: " + sprite_x + " | x_max: " + sprite_x_max);
-                sprite_x++;
-                if (sprite_x < sprite_x_max) return;
+                if (++sprite_x < sprite_x_max) return;
                 Log.d(TAG, "fire: cancel");
                 setPerformingAction(false);
                 cancel();
