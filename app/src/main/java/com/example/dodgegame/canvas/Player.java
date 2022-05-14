@@ -40,7 +40,7 @@ public class Player extends Entity implements SensorEventListener2 {
     }
 
     void fireBullet(){
-        DrawCanvas.bullets.push(new Bullet(context, canvas, x, y));
+        DrawCanvas.bullets.push(new Bullet(context, canvas, x + (sprite_width/2), y));
     }
 
     @Override

@@ -132,7 +132,7 @@ abstract public class Entity {
         draw();
 
         checkIsAlive();
-        showCollision();
+//        showCollision();
         if (!(this instanceof Bullet))
             if (!isPerformingAction()){
                 if (!isHasTouched()){

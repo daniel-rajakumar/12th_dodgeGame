@@ -13,7 +13,7 @@ public class Bullet extends Entity {
     Bullet(Context context, Canvas canvas, int x, int y){
         super(context, canvas);
         setImageBullet();
-        setMoveSpeed(5);
+        setMoveSpeed(10);
         direction = Direction.TOP;
         setLocation_byPixel(x, y);
     }
@@ -22,15 +22,22 @@ public class Bullet extends Entity {
     void move() {
         if (direction == Direction.TOP) moveTop();
 
+//        setCollision(new Rect(
+//                this.x + (this.sprite_width/2),
+//                this.y + this.sprite_height,
+//                (this.x + (this.sprite_width/2)) + this.sprite_width/2,
+//                this.y + this.sprite_height * 2));
+
         setCollision(new Rect(
-                this.x + (this.sprite_width/2),
-                this.y + this.sprite_height,
-                (this.x + (this.sprite_width/2)) + this.sprite_width/2,
-                this.y + this.sprite_height * 2));
+                this.x,
+                this.y,
+                this.x + this.sprite_width,
+                this.y + this.sprite_height));
+
     }
 
     private void moveTop() {
-        this.y--;
+        this.y -= moveSpeed;
     }
 
     @Override

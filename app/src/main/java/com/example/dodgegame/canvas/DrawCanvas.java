@@ -54,8 +54,8 @@ public class DrawCanvas {
 
         canvas.drawRGB(0,0,0);
         updateEnemies();
-        player.update();
         updateBullets();
+        player.update();
     }
 
 
