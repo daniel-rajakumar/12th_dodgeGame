@@ -83,6 +83,7 @@ abstract public class Entity {
         images.put("enemy",  BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_enemy));
         images.put("bullet",  BitmapFactory.decodeResource(context.getResources(), R.drawable.bullet));
         images.put("grass",  BitmapFactory.decodeResource(context.getResources(), R.drawable.grass));
+        images.put("endScreen",  BitmapFactory.decodeResource(context.getResources(), R.drawable.end_screen));
     }
 
 
