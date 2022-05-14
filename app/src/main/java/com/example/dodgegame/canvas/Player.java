@@ -57,40 +57,27 @@ public class Player extends Entity implements SensorEventListener2 {
         damageCoolDown.cancel();
         damageCoolDown = new Timer();
         damageCoolDown.schedule(new TimerTask() {
+            int count = 0;
             public void run() {
+                if (++count <= 5) return;
                 setDamaged(false);
+                damageCoolDown.cancel();
             }
-        }, 5000, 1);
+        }, 0, 1000);
     }
 
     @Override
     void checkIsAlive() {
+
     }
-    //wait 0 ms before doing the action and do it evry 1000ms (1second)
-//        if (isDamaged){
-//            damagePlayer();
-//        }
-
-//        for (int i = 0; i < DrawCanvas.enemies.size(); i++){
-//            Rect temp2 = DrawCanvas.enemies.get(i).collision;
-//            Rect temp1 = collision;
-//            if (temp1 != null && temp2 != null)
-//                if (Rect.intersects(temp1, temp2)) {
-//                    damagePlayer(DrawCanvas.enemies.get(i));
-//                }
-//        }
-
-//    void damagePlayer(Enemy enemy){
-//
-//    }
 
     void fireBullet(){
         int width = (this.entity_width/2);
         int height = (this.entity_height/2);
 
         DrawCanvas.bullets.push(new Bullet(context, canvas
-                , (this.x + (width))
-                , this.y + (height)
+                , this.x + width
+                , this.y + height
         ));
     }
 
@@ -103,8 +90,8 @@ public class Player extends Entity implements SensorEventListener2 {
         this.sprite_x = 0;
         this.sprite_x_max = 4;
         this.sprite_y = 12;
-
         fireBullet();
+
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
