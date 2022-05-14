@@ -232,14 +232,14 @@ abstract public class Entity {
         this.scaler = scaler;
     }
 
-    boolean growing = true;
+
+    private boolean growing = true, growing_first = true;
     public void increaseScale(float increase, float max){
-        if (scaler > max) {
-            growing = false;
-        }
-        if (scaler*1.1 < max){
-            growing = true;
-        }
+        if (scaler     > max)   { growing = false; growing_first = false; }
+        if (scaler*1.1 < max)     growing = true;
+
+
+        if (!growing_first) increase/=2;
 
         if (growing) scaler+=increase;
         else         scaler-=increase;
