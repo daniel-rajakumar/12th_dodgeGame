@@ -67,6 +67,7 @@ public class DrawCanvas {
         player.update();
         updateGrass();
         updateScore();
+        updateTime();
     }
 
     int toggle = 0;
@@ -127,12 +128,19 @@ public class DrawCanvas {
     }
 
     void updateScore(){
-        String text = String.valueOf(score);
+        text = String.valueOf(score);
         canvas.drawText(text,
                 player.x_per(0.95) - (text.length() * fontSize),
                 player.y_per(0.075),
                 paint);
+    }
 
+    void updateTime(){
+        text = String.valueOf(time);
+        canvas.drawText(text,
+                player.x_per(0.05),
+                player.y_per(0.075),
+                paint);
     }
 
     public void background(){
@@ -146,6 +154,16 @@ public class DrawCanvas {
                     enemies.push(new Enemy(context, canvas, random(min, max),-offset * 2));
             }
         }, 0, 1000);
+
+        new Timer().schedule(new TimerTask() {
+            public void run() {
+                if (--time > 0) return;
+                gameOver = true;
+                Log.d(TAG, "gameOver: " + "true");
+//                time = 0;
+            }
+        }, 0, 10);
+
     }
 
     int random(int min, int max){
@@ -158,6 +176,7 @@ public class DrawCanvas {
         player = new Player(context, canvas);
         score = 0;
         time = 90;
+        gameOver = false;
     }
 
 }

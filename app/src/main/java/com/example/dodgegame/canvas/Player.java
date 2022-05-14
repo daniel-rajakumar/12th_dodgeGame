@@ -81,18 +81,12 @@ public class Player extends Entity implements SensorEventListener2 {
         ));
     }
 
-    boolean newGame;
     @Override
     public void fire() {
-        DrawCanvas.gameOver = !DrawCanvas.gameOver;
         if (DrawCanvas.gameOver) {
             DrawCanvas.resetGame(context, canvas);
-            newGame = false;
             return;
         }
-        if (!newGame) return;
-        newGame = true;
-
         if (isPerformingAction() || isDamaged()) return;
         setPerformingAction(true);
 
