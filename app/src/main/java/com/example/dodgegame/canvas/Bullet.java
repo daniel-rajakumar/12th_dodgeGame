@@ -4,9 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 public class Bullet extends Entity {
     private static final String TAG = "testing";
 

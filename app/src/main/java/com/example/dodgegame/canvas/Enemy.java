@@ -15,7 +15,7 @@ public class Enemy extends Entity {
     Enemy(Context context, Canvas canvas, int x, int y){
         super(context, canvas);
         setImage(Direction.BOTTOM, 3f);
-        setMoveSpeed(15);
+        setMoveSpeed(10);
         setLocation_byPixel(x, y);
         direction = Direction.BOTTOM;
     }

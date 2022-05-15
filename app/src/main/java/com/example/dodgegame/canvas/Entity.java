@@ -23,7 +23,7 @@ abstract public class Entity {
     Canvas canvas;
     Context context;
     Direction direction;
-    int moveSpeed;
+    int moveSpeed, moveSpeed_water, moveSpeed_land;
     int drawable;
     int x, y;
     int sprite_width, sprite_height;
@@ -84,6 +84,7 @@ abstract public class Entity {
         this.sprite_height = (image.getHeight() / 21);
         this.entity_width = (int) (sprite_width * scaler);
         this.entity_height = (int) (sprite_height * scaler);
+
     }
 
     static void loadAllImages(Context context){
@@ -127,13 +128,19 @@ abstract public class Entity {
 //                    , new Matrix(), null);
 //
 
-            canvas.drawBitmap(
-                    Bitmap.createBitmap(this.image
-                            , sprite_width * (1 + sprite_x)
-                            , sprite_height * sprite_y
-                            , sprite_width
-                            , sprite_height
-                    ), new Matrix(), null);
+            int _x = sprite_width * (1 + sprite_x);
+            int _y = sprite_height * sprite_y;
+            int _w = sprite_width;
+            int _h = sprite_height;
+
+            if (y < y_per(DrawCanvas.waterSize)){
+                _h/=2;
+                moveSpeed = moveSpeed_water;
+            } else {
+                moveSpeed = moveSpeed_land;
+            }
+
+            canvas.drawBitmap(Bitmap.createBitmap(this.image, _x, _y, _w, _h), new Matrix(), null);
         }
         canvas.restore();
     }
@@ -202,6 +209,8 @@ abstract public class Entity {
 
     public void setMoveSpeed(int moveSpeed) {
         this.moveSpeed = moveSpeed;
+        this.moveSpeed_land = moveSpeed;
+        this.moveSpeed_water = moveSpeed/2;
     }
 
 

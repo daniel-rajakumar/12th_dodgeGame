@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
 import android.util.Log;
@@ -30,7 +31,7 @@ public class DrawCanvas {
     Context context;
     Canvas canvas;
     static int score, highScore = Integer.MIN_VALUE;
-    static int time, total_time = 15;
+    static int time, total_time = 35;
 
     int fontSize, original_fontSize = 100;
     static GameScene gameScene = GameScene.START;
@@ -49,6 +50,7 @@ public class DrawCanvas {
                  timer_time = new Timer();
 
     static Vibrator vibrator;
+    static float waterSize = 0.4f;
 
     public void update(Context context,Canvas canvas){
         this.context = context;
@@ -68,13 +70,20 @@ public class DrawCanvas {
             vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         }
 
-        canvas.drawRGB(194,178,128);
+
+        drawBackground();
 
         switch (gameScene){
             case START: showStartScreen(); break;
             case GAME: showGamePlayScreen(); break;
             case END: showEndScreen(); break;
         }
+    }
+
+    void drawBackground(){
+        canvas.drawRGB(0, 0, 200);
+        paint.setColor(Color.YELLOW);
+        canvas.drawRect(new Rect(0, player.y_per(waterSize + 0.1), player.x_per(1), player.y_per(1)), paint);
     }
 
     void setUpMusic(){
