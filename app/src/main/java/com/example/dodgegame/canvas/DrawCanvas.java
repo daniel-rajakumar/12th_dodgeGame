@@ -17,6 +17,10 @@ import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+enum GameScene {
+    START, GAME, END
+}
+
 public class DrawCanvas {
     private static final String TAG = "Test";
     public static Player player;
@@ -25,11 +29,12 @@ public class DrawCanvas {
     Context context;
     Canvas canvas;
     static int score, highScore = Integer.MIN_VALUE;
-    static int time, total_time = 3;
+    static int time, total_time = 15;
 
     int fontSize;
-    static boolean gameOver = false;
-    static boolean grassAnimation = true;
+    static GameScene gameScene = GameScene.GAME;
+//    static boolean endScreen = false, startScreen = false, gameScreen = true;
+    static boolean grassAnimation = false;
 
     static boolean start = true, end = false;
     static boolean gameRunning = true;
@@ -60,8 +65,10 @@ public class DrawCanvas {
         canvas.drawRGB(0,0,0);
 
         grassAnimation();
-        if (!gameOver) showGamePlayScreen();
-        else           showEndScreen();
+        switch (gameScene){
+            case GAME: showGamePlayScreen(); break;
+            case END: showEndScreen(); break;
+        }
     }
 
     void setUpMusic(){
@@ -199,21 +206,39 @@ public class DrawCanvas {
         Bitmap image = Entity.images.get("grass_long");
         Log.d(TAG, "updateGrass: " + grass_animation_count);
 
-        grass_animation_count = grassAnimate();
+         grassAnimate();
         canvas.drawBitmap(image, 0, -image.getHeight() + player.y_per(grass_animation_count), null);
     }
 
-    float grassAnimate(){
-        if (!gameOver){
-            if (grass_animation_count >= 0.5)
-                return (grass_animation_count -= 0.01);
-            grassAnimation = true;
-        } else {
-            if (grass_animation_count <= 1.5f)
-                return (grass_animation_count += 0.01);
-            grassAnimation = false;
+    void grassAnimate(){
+        Log.d(TAG, "grass: scene: " + gameScene + " | count: " + grass_animation_count);
+        switch (gameScene){
+            case START: case END:
+                grassShow(); break;
+            case GAME: grassHide(); break;
         }
-        return grass_animation_count;
+    }
+
+    void grassHide(){
+        if (grass_animation_count >= 0.5){
+            grass_animation_count -= 0.01;
+            Log.d(TAG, "scene: grass -> " + "hiding");
+            grassAnimation = true;
+            return;
+        }
+        Log.d(TAG, "scene: grass -> " + "noting");
+        grassAnimation = false;
+    }
+
+    void grassShow(){
+        if (grass_animation_count <= 1.5f){
+            grass_animation_count += 0.01;
+            Log.d(TAG, "scene: grass -> " + "showing");
+            grassAnimation = true;
+            return;
+        }
+        Log.d(TAG, "scene: grass -> " + "noting");
+        grassAnimation = false;
     }
 
     void updateScore(){
@@ -266,7 +291,8 @@ public class DrawCanvas {
                 }
 
                 if (time > -1) return;
-                gameOver = true;
+//                endScreen = true;
+                gameScene = GameScene.END;
                 gameplay_music.pause();
                 if (score > highScore)
                     highScore = score;
@@ -288,7 +314,8 @@ public class DrawCanvas {
         player = new Player(context, canvas);
         score = 0;
         time = total_time;
-        gameOver = false;
+//        endScreen = false;
+        gameScene = GameScene.GAME;
         endScreen_music.pause();
         endScreen_music.seekTo(0);
         gameplay_music.start();

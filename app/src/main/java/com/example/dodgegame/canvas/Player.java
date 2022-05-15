@@ -113,7 +113,8 @@ public class Player extends Entity implements SensorEventListener2 {
 
     @Override
     public void fire() {
-        if (DrawCanvas.gameOver && !DrawCanvas.grassAnimation) {
+        if (DrawCanvas.gameScene == GameScene.END
+        && !DrawCanvas.grassAnimation) {
             DrawCanvas.resetGame(context, canvas);
             return;
         }

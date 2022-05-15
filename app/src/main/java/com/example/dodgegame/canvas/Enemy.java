@@ -73,13 +73,16 @@ public class Enemy extends Entity {
     void removeEnemy(Enemy enemy, Entity entity){
         if (enemy.isHasTouched()) return;
 
-        if (entity instanceof Player){
-            DrawCanvas.score--;
-            DrawCanvas.hurt_music.start();
-             ((Player) entity).damagePlayer();
-        } else if (entity instanceof Bullet){
-            DrawCanvas.score++;
-            entity.setToRemove(true);
+        Log.d(TAG, "removeEnemy: " + DrawCanvas.grassAnimation);
+        if (!DrawCanvas.grassAnimation){
+            if (entity instanceof Player){
+                DrawCanvas.score--;
+                DrawCanvas.hurt_music.start();
+                ((Player) entity).damagePlayer();
+            } else if (entity instanceof Bullet){
+                DrawCanvas.score++;
+                entity.setToRemove(true);
+            }
         }
 
         enemy.setHasTouched(true);
