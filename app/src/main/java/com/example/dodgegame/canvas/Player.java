@@ -9,14 +9,13 @@ import android.hardware.SensorEventListener2;
 import android.hardware.SensorManager;
 import android.util.Log;
 
-import com.example.dodgegame.GameSurface;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class Player extends Entity implements SensorEventListener2 {
     private static final String TAG = "testing";
-    Timer damageCoolDown;
+    Timer damageCoolDown, blinkTimer;
+    int coolDownTime = 5;
 
     Player(Context context, Canvas canvas){
         super(context, canvas);
@@ -32,6 +31,7 @@ public class Player extends Entity implements SensorEventListener2 {
         sensorManager.registerListener(this, accelerometerSensor, sensorManager.SENSOR_DELAY_NORMAL);
 
         damageCoolDown = new Timer();
+        blinkTimer = new Timer();
     }
 
     @Override
@@ -54,20 +54,36 @@ public class Player extends Entity implements SensorEventListener2 {
 
 
 
+    public boolean blink = false;
     void damagePlayer(){
+        blinkTimer.cancel();
+        blinkTimer = new Timer();
+        blink = false;
         setDamaged(true);
-        Log.d(TAG, "damagePlayer: " + "yes");
+//        Log.d(TAG, "damagePlayer: " + "yes");
 
         damageCoolDown.cancel();
         damageCoolDown = new Timer();
         damageCoolDown.schedule(new TimerTask() {
             int count = 0;
             public void run() {
-                if (++count <= 5) return;
+                count++;
+                if (count == coolDownTime - 1) startBlinking();
+                if (count <= coolDownTime) return;
                 setDamaged(false);
                 damageCoolDown.cancel();
             }
         }, 0, 1000);
+    }
+
+    void startBlinking(){
+        Log.d(TAG, "startBlinking: " + "blinking");
+        blinkTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                blink = !blink;
+            }
+        }, 0, 250);
     }
 
     @Override

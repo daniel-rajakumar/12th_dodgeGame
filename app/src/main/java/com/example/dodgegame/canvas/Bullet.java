@@ -24,7 +24,7 @@ public class Bullet extends Entity {
         increaseScale(0.0015f, 0.1f);
 
         setCollision(new Rect(
-                this.x ,
+                this.x,
                 this.y,
                 this.x  + this.sprite_width,
                 this.y + this.sprite_height));

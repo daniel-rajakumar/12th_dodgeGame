@@ -57,11 +57,19 @@ abstract public class Entity {
         this.image = image;
     }
 
+    boolean blinkToggle;
     public void setImage(Direction direction, float scaler) {
         this.scaler = scaler;
         if (this instanceof Player) {
-            if (isDamaged) this.image = images.get("enemy");
-            else           this.image = images.get("player");
+            if (isDamaged) {
+                if (DrawCanvas.player.blink) {
+                    this.image = images.get("player");
+                } else {
+                    this.image = images.get("enemy");
+                }
+            } else {
+                this.image = images.get("player");
+            }
         }
         if (this instanceof Enemy ) this.image = images.get("enemy");
 
