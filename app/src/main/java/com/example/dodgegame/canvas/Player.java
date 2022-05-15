@@ -57,7 +57,7 @@ public class Player extends Entity implements SensorEventListener2 {
 
     private void moveTop() {
         if (y_per(0.8) <= y)
-            y -= moveSpeed/3;
+            y -= 3;
         else
             isWalking = false;
     }
@@ -187,7 +187,11 @@ public class Player extends Entity implements SensorEventListener2 {
         float x = sensorEvent.values[0];
 
         direction = Direction.TOP;
-        if (Math.abs(x) > 2f) {
+        if (Math.abs(x) > 4f) {
+            setMoveSpeed(15);
+            direction = (x < 0) ? Direction.RIGHT : Direction.LEFT;
+        } else if (Math.abs(x) > 2f){
+            setMoveSpeed(5);
             direction = (x < 0) ? Direction.RIGHT : Direction.LEFT;
         }
 
