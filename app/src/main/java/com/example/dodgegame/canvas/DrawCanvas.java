@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.media.MediaPlayer;
+import android.os.Vibrator;
 import android.util.Log;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -29,7 +30,7 @@ public class DrawCanvas {
     Context context;
     Canvas canvas;
     static int score, highScore = Integer.MIN_VALUE;
-    static int time, total_time = 45;
+    static int time, total_time = 15;
 
     int fontSize, original_fontSize = 100;
     static GameScene gameScene = GameScene.START;
@@ -47,6 +48,8 @@ public class DrawCanvas {
     static Timer timer_enemy = new Timer(),
                  timer_time = new Timer();
 
+    static Vibrator vibrator;
+
     public void update(Context context,Canvas canvas){
         this.context = context;
         this.canvas = canvas;
@@ -62,6 +65,7 @@ public class DrawCanvas {
             paint.setTextSize(fontSize);
             paint.setTypeface(ResourcesCompat.getFont(context, R.font.font_1));
             setUpMusic();
+            vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         }
 
         canvas.drawRGB(0,0,0);

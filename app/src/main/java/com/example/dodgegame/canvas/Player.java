@@ -7,6 +7,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener2;
 import android.hardware.SensorManager;
+import android.os.VibrationEffect;
 import android.util.Log;
 
 import java.util.Timer;
@@ -64,6 +65,7 @@ public class Player extends Entity implements SensorEventListener2 {
 
     public boolean blink = false;
     void damagePlayer(){
+        DrawCanvas.vibrator.vibrate(VibrationEffect.createOneShot(250, VibrationEffect.DEFAULT_AMPLITUDE));
         blinkTimer.cancel();
         blinkTimer = new Timer();
         blink = false;
@@ -116,11 +118,13 @@ public class Player extends Entity implements SensorEventListener2 {
         if (DrawCanvas.gameScene == GameScene.END
         && !DrawCanvas.grassAnimation) {
             DrawCanvas.resetGame(context, canvas);
+            DrawCanvas.vibrator.vibrate(VibrationEffect.createOneShot(1000, VibrationEffect.DEFAULT_AMPLITUDE));
             return;
         }
 
         if (DrawCanvas.gameScene == GameScene.START){
             DrawCanvas.gameScene = GameScene.GAME;
+            DrawCanvas.vibrator.vibrate(VibrationEffect.createOneShot(1000, VibrationEffect.DEFAULT_AMPLITUDE));
             return;
         }
 

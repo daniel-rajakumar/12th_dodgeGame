@@ -3,6 +3,7 @@ package com.example.dodgegame.canvas;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.os.VibrationEffect;
 import android.util.Log;
 
 import java.util.Timer;
