@@ -6,8 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.RectF;
+import android.media.MediaPlayer;
 import android.util.Log;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -15,20 +14,19 @@ import androidx.core.content.res.ResourcesCompat;
 import com.example.dodgegame.R;
 
 import java.util.LinkedList;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class DrawCanvas {
     private static final String TAG = "Test";
-    int i = 0;
     public static Player player;
     static LinkedList<Enemy> enemies = new LinkedList<>();
     static LinkedList<Bullet> bullets = new LinkedList<>();
     Context context;
     Canvas canvas;
     static int score;
-    static int time;
+    static int time, total_time = 10;
+
     int fontSize;
     static boolean gameOver = false;
 
@@ -36,6 +34,8 @@ public class DrawCanvas {
     static boolean gameRunning = true;
     Paint paint = new Paint();
     String text;
+    static MediaPlayer gameplay_music, endScreen_music, fire_music;
+    float count = 1;
 
     public void update(Context context,Canvas canvas){
         this.context = context;
@@ -46,19 +46,43 @@ public class DrawCanvas {
             Entity.loadAllImages(context);
             player = new Player(context, canvas);
             background();
-            time = 90;
+            time = total_time;
             fontSize = 100;
             score = 0;
-
             paint.setColor(Color.RED);
             paint.setTextSize(fontSize);
             paint.setTypeface(ResourcesCompat.getFont(context, R.font.font_1));
+            setUpMusic();
         }
 
         canvas.drawRGB(0,0,0);
 
         if (!gameOver) showGamePlayScreen();
         else           showEndScreen();
+    }
+
+    void setUpMusic(){
+        gameplay_music = MediaPlayer.create(context,R.raw.gameplay_music);
+        fire_music = MediaPlayer.create(context,R.raw.fire);
+        endScreen_music = MediaPlayer.create(context,R.raw.endscreen_music);
+        gameplay_music.start();
+        gameplay_music.setLooping(true);
+        gameplay_music.setPlaybackParams(gameplay_music.getPlaybackParams().setSpeed(0.75f));
+    }
+
+    void updateMusic(){
+        Log.d(TAG, "music: " + (total_time - time) + " == " + (total_time/2));
+//        if (total_time/time > 2){
+//            mediaPlayer.setPlaybackParams(mediaPlayer.getPlaybackParams().setSpeed(2f));
+//        }
+
+        if ((total_time - time) == total_time*0.5){
+            gameplay_music.setPlaybackParams(gameplay_music.getPlaybackParams().setSpeed(1f));
+        }
+
+        if (time == 10){
+            gameplay_music.setPlaybackParams(gameplay_music.getPlaybackParams().setSpeed(1.25f));
+        }
     }
 
     void showGamePlayScreen(){
@@ -68,6 +92,7 @@ public class DrawCanvas {
         updateGrass();
         updateScore();
         updateTime();
+        updateMusic();
     }
 
     int toggle = 0;
@@ -159,6 +184,9 @@ public class DrawCanvas {
             public void run() {
                 if (--time > 0) return;
                 gameOver = true;
+                gameplay_music.pause();
+                gameplay_music.seekTo(0);
+                endScreen_music.start();
             }
         }, 0, 1000);
 
@@ -173,8 +201,12 @@ public class DrawCanvas {
         bullets.clear();
         player = new Player(context, canvas);
         score = 0;
-        time = 90;
+        time = total_time;
         gameOver = false;
+        endScreen_music.pause();
+        endScreen_music.seekTo(0);
+        gameplay_music.start();
+        gameplay_music.seekTo(0);
     }
 
 }

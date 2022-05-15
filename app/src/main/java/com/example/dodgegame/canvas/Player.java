@@ -74,6 +74,8 @@ public class Player extends Entity implements SensorEventListener2 {
     }
 
     void fireBullet(){
+        DrawCanvas.fire_music.start();
+
         int width = (this.entity_width/2);
         int height = (this.entity_height/2);
 
