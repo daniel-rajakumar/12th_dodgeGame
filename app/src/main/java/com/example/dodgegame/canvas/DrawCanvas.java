@@ -31,7 +31,7 @@ public class DrawCanvas {
     static int score, highScore = Integer.MIN_VALUE;
     static int time, total_time = 15;
 
-    int fontSize;
+    int fontSize = 100;
     static GameScene gameScene = GameScene.START;
 //    static boolean endScreen = false, startScreen = false, gameScreen = true;
     static boolean grassAnimation = false;
@@ -44,6 +44,9 @@ public class DrawCanvas {
     static MediaPlayer gameplay_music, endScreen_music, fire_music, hurt_music;
     float count = 1;
     static float grass_animation_count = 1.5f;
+
+    static Timer timer_enemy = new Timer(),
+                 timer_time = new Timer();
 
     public void update(Context context,Canvas canvas){
         this.context = context;
@@ -287,7 +290,9 @@ public class DrawCanvas {
         int max = canvas.getWidth() - (width * 3);
         int offset = player.entity_height;
 
-        new Timer().schedule(new TimerTask() {
+        timer_enemy.cancel();
+        timer_enemy = new Timer();
+        timer_enemy.schedule(new TimerTask() {
             public void run() {
                 if (player.isWalking) return;
                 enemies.push(new Enemy(context, canvas, random(min, max),-offset * 2));
@@ -298,8 +303,9 @@ public class DrawCanvas {
     static float bounceSpeed = 0;
     float bounceSize = 0;
     void timerCountDown(){
-
-        new Timer().schedule(new TimerTask() {
+        timer_time.cancel();
+        timer_time = new Timer();
+        timer_time.schedule(new TimerTask() {
             public void run() {
                 if (--time < 10){
                     bounceSpeed = 1;
