@@ -29,11 +29,10 @@ public class DrawCanvas {
     Context context;
     Canvas canvas;
     static int score, highScore = Integer.MIN_VALUE;
-    static int time, total_time = 30;
+    static int time, total_time = 10;
 
     int fontSize = 100;
     static GameScene gameScene = GameScene.START;
-//    static boolean endScreen = false, startScreen = false, gameScreen = true;
     static boolean grassAnimation = false;
 
     static boolean start = true, game_start = true, end_start = true;
@@ -137,8 +136,10 @@ public class DrawCanvas {
         if (!grassAnimation){
             updateScreenText();
             if (end_start){
-                endScreen_music.start();
-                end_start = false;
+                if (gameScene == GameScene.END){
+                    endScreen_music.start();
+                    end_start = false;
+                }
             }
         }
     }
@@ -340,7 +341,8 @@ public class DrawCanvas {
         gameScene = GameScene.GAME;
         bounceSpeed = 0;
         grass_animation_count = 1.5f;
-        game_start = end_start = true;
+        game_start = true;
+        end_start = true;
 
         // sounds
         endScreen_music.pause();
