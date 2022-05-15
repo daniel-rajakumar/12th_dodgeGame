@@ -152,14 +152,14 @@ public class DrawCanvas {
     public void updateScreenText(){
         showPlayerSymbol();
         paint.setTextSize(fontSize = original_fontSize);
-        text = "Score: " + (gameScene == GameScene.START ? "N/A" : score);
+        text = "Score: " + (gameScene == GameScene.END ? score :  "N/A");
         canvas.drawText(text
                 , player.x_per(0.975) - (fontSize * text.length())
                 , player.y_per(0.1)
                 , paint);
 
         paint.setTextSize(fontSize/=2);
-        text = "High Score: " + (gameScene == GameScene.START ? "N/A" : highScore);
+        text = "High Score: " + (gameScene == GameScene.END ? highScore : "N/A");
         canvas.drawText(text
                 , player.x_per(0.975) - (fontSize * text.length())
                 , player.y_per(0.1) + (fontSize * 2)
@@ -174,7 +174,7 @@ public class DrawCanvas {
                     , player.y_per(0.9)
                     , paint);
 
-            text = " play" + (gameScene == GameScene.START ? "!" : " again!");
+            text = " play " + (gameScene == GameScene.END ? "again!" : "!");
             canvas.drawText(text
                     , player.x_per(0.975) - (fontSize * text.length())
                     , player.y_per(0.9) + (fontSize * 2)
@@ -265,27 +265,29 @@ public class DrawCanvas {
 
     void updateScore(){
         text = String.valueOf(score);
-        canvas.drawText(text,
-                player.x_per(0.95) - (text.length() * fontSize),
-                player.y_per(0.075),
-                paint);
+        paint.setTextSize(original_fontSize);
+        canvas.drawText(text
+                , player.x_per(0.95) - (text.length() * fontSize)
+                , player.y_per(0.075)
+                , paint);
     }
 
     void updateTime(){
         text = String.valueOf(time);
 
-        bounceSize += bounceSpeed;
-        paint.setTextSize(paint.getTextSize() + bounceSize);
-        canvas.drawText(text,
-                player.x_per(0.05),
-                player.y_per(0.075) + bounceSize/2,
-                paint);
+        paint.setTextSize(original_fontSize + (bounceSize += bounceSpeed));
+        canvas.drawText(text
+                , player.x_per(0.05)
+                , player.y_per(0.075) + bounceSize/2
+                , paint);
         paint.setTextSize(paint.getTextSize() - bounceSize);
 
         Log.d(TAG, "updateTime: bounce: " + bounceSpeed);
 
         if (time < 10){
             bounceSpeed *= 1.02;
+        } else {
+            bounceSpeed = 0;
         }
     }
 

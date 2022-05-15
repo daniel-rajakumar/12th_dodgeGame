@@ -65,7 +65,7 @@ public class Player extends Entity implements SensorEventListener2 {
 
     public boolean blink = false;
     void damagePlayer(){
-        DrawCanvas.vibrator.vibrate(VibrationEffect.createOneShot(250, VibrationEffect.DEFAULT_AMPLITUDE));
+        DrawCanvas.vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
         blinkTimer.cancel();
         blinkTimer = new Timer();
         blink = false;
@@ -103,6 +103,7 @@ public class Player extends Entity implements SensorEventListener2 {
 
     void fireBullet(){
         DrawCanvas.fire_music.start();
+        DrawCanvas.vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE));
 
         int width = (this.entity_width/2);
         int height = (this.entity_height/2);
