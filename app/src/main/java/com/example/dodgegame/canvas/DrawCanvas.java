@@ -68,7 +68,7 @@ public class DrawCanvas {
             vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         }
 
-        canvas.drawRGB(0,0,0);
+        canvas.drawRGB(194,178,128);
 
         switch (gameScene){
             case START: showStartScreen(); break;
