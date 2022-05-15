@@ -56,7 +56,7 @@ public class Player extends Entity implements SensorEventListener2 {
 
     private void moveTop() {
         if (y_per(0.8) <= y)
-            y -= moveSpeed/5;
+            y -= moveSpeed/3;
         else
             isWalking = false;
     }

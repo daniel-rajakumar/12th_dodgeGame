@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.media.MediaPlayer;
 import android.util.Log;
@@ -25,10 +24,11 @@ public class DrawCanvas {
     Context context;
     Canvas canvas;
     static int score, highScore = Integer.MIN_VALUE;
-    static int time, total_time = 30;
+    static int time, total_time = 3;
 
     int fontSize;
     static boolean gameOver = false;
+    static boolean grassAnimation = true;
 
     static boolean start = true, end = false;
     static boolean gameRunning = true;
@@ -36,6 +36,7 @@ public class DrawCanvas {
     String text;
     static MediaPlayer gameplay_music, endScreen_music, fire_music, hurt_music;
     float count = 1;
+    static float grass_animation_count = 1.5f;
 
     public void update(Context context,Canvas canvas){
         this.context = context;
@@ -57,6 +58,7 @@ public class DrawCanvas {
 
         canvas.drawRGB(0,0,0);
 
+        grassAnimation();
         if (!gameOver) showGamePlayScreen();
         else           showEndScreen();
     }
@@ -86,6 +88,11 @@ public class DrawCanvas {
         }
     }
 
+    void grassAnimation(){
+
+
+    }
+
     void showGamePlayScreen(){
         updateEnemies();
         updateBullets();
@@ -98,22 +105,32 @@ public class DrawCanvas {
 
     int toggle = 0;
     void showEndScreen(){
+        if (grassAnimation){
+            updateEnemies();
+            player.update();
+        }
+        updateGrass();
         toggle++;
-        Bitmap image = Entity.images.get("endScreen");
-        canvas.drawBitmap(image, new Matrix(),null);
+//        Bitmap image = Entity.images.get("endScreen");
+//        canvas.drawBitmap(image, new Matrix(),null);
+        if (!grassAnimation){
+            updateEndScreenText();
+        }
+    }
 
 
+    public void updateEndScreenText(){
         text = "score: " + score;
         canvas.drawText(text
                 , player.x_per(0.975) - (fontSize * text.length())
-                , player.y_per(0.8)
+                , player.y_per(0.5)
                 , paint);
 
         paint.setTextSize(fontSize/=2);
         text = "high Score: " + highScore;
         canvas.drawText(text
                 , player.x_per(0.975) - (fontSize * text.length())
-                , player.y_per(0.8) + (fontSize * 2)
+                , player.y_per(0.5) + (fontSize * 2)
                 , paint);
         paint.setTextSize(fontSize*=2);
 
@@ -132,8 +149,8 @@ public class DrawCanvas {
                     , paint);
             paint.setTextSize(fontSize*=2);
         }
-    }
 
+    }
 
     public void updateBullets(){
         for (int i = 0; i < bullets.size(); i++)
@@ -159,7 +176,24 @@ public class DrawCanvas {
     }
 
     void updateGrass(){
-        canvas.drawBitmap(Entity.images.get("grass"), 0, player.y_per(-0.1), null);
+        Bitmap image = Entity.images.get("grass_long");
+        Log.d(TAG, "updateGrass: " + grass_animation_count);
+
+        grass_animation_count = grassAnimate();
+        canvas.drawBitmap(image, 0, -image.getHeight() + player.y_per(grass_animation_count), null);
+    }
+
+    float grassAnimate(){
+        if (!gameOver){
+            if (grass_animation_count >= 0.5)
+                return (grass_animation_count -= 0.01);
+            grassAnimation = true;
+        } else {
+            if (grass_animation_count <= 1.5f)
+                return (grass_animation_count += 0.01);
+            grassAnimation = false;
+        }
+        return grass_animation_count;
     }
 
     void updateScore(){
@@ -239,6 +273,7 @@ public class DrawCanvas {
         endScreen_music.seekTo(0);
         gameplay_music.start();
         bounceSpeed = 0;
+        grass_animation_count = 1.5f;
 
         gameplay_music.setPlaybackParams(gameplay_music.getPlaybackParams().setSpeed(0.75f));
     }
