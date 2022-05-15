@@ -199,6 +199,7 @@ public class DrawCanvas {
 
         new Timer().schedule(new TimerTask() {
             public void run() {
+                    if (player.isWalking) return;
                     enemies.push(new Enemy(context, canvas, random(min, max),-offset * 2));
             }
         }, 0, 1000);

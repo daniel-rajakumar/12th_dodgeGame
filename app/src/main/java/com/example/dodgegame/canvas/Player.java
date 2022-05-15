@@ -23,7 +23,7 @@ public class Player extends Entity implements SensorEventListener2 {
         setImage(Direction.TOP, 3f);
         setMoveSpeed(15);
         do {
-            setLocation_byPixel(canvas.getWidth()/2, (canvas.getHeight()));
+            setLocation_byPixel(canvas.getWidth()/2, canvas.getHeight());
         } while (x == 0);
         setDamaged(false);
 
@@ -56,7 +56,7 @@ public class Player extends Entity implements SensorEventListener2 {
 
     private void moveTop() {
         if (y_per(0.8) <= y)
-            y -= moveSpeed/3;
+            y -= moveSpeed/5;
         else
             isWalking = false;
     }
