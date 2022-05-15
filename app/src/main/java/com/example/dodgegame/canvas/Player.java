@@ -16,13 +16,14 @@ public class Player extends Entity implements SensorEventListener2 {
     private static final String TAG = "testing";
     Timer damageCoolDown, blinkTimer;
     int coolDownTime = 5;
+    boolean isWalking = true;
 
     Player(Context context, Canvas canvas){
         super(context, canvas);
         setImage(Direction.TOP, 3f);
         setMoveSpeed(15);
         do {
-            setLocation_byPixel(canvas.getWidth()/2, (int)(canvas.getHeight()*0.8));
+            setLocation_byPixel(canvas.getWidth()/2, (canvas.getHeight()));
         } while (x == 0);
         setDamaged(false);
 
@@ -38,6 +39,7 @@ public class Player extends Entity implements SensorEventListener2 {
     void move() {
         if (direction == Direction.RIGHT) moveRight();
         if (direction == Direction.LEFT)  moveLeft();
+        if (isWalking)  moveTop();
 
 //        updateCollision();
 
@@ -52,6 +54,12 @@ public class Player extends Entity implements SensorEventListener2 {
         ));
     }
 
+    private void moveTop() {
+        if (y_per(0.8) <= y)
+            y -= moveSpeed/3;
+        else
+            isWalking = false;
+    }
 
 
     public boolean blink = false;
