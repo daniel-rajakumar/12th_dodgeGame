@@ -34,7 +34,7 @@ public class DrawCanvas {
     static boolean gameRunning = true;
     Paint paint = new Paint();
     String text;
-    static MediaPlayer gameplay_music, endScreen_music, fire_music;
+    static MediaPlayer gameplay_music, endScreen_music, fire_music, hurt_music;
     float count = 1;
 
     public void update(Context context,Canvas canvas){
@@ -65,6 +65,7 @@ public class DrawCanvas {
         gameplay_music = MediaPlayer.create(context,R.raw.gameplay_music);
         fire_music = MediaPlayer.create(context,R.raw.fire);
         endScreen_music = MediaPlayer.create(context,R.raw.endscreen_music);
+        hurt_music = MediaPlayer.create(context,R.raw.no);
         gameplay_music.start();
         gameplay_music.setLooping(true);
         gameplay_music.setPlaybackParams(gameplay_music.getPlaybackParams().setSpeed(0.75f));
@@ -206,7 +207,7 @@ public class DrawCanvas {
         endScreen_music.pause();
         endScreen_music.seekTo(0);
         gameplay_music.start();
-        gameplay_music.seekTo(0);
+        gameplay_music.setPlaybackParams(gameplay_music.getPlaybackParams().setSpeed(0.75f));
     }
 
 }

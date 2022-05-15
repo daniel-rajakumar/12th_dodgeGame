@@ -75,6 +75,7 @@ public class Enemy extends Entity {
 
         if (entity instanceof Player){
             DrawCanvas.score--;
+            DrawCanvas.hurt_music.start();
              ((Player) entity).damagePlayer();
         } else if (entity instanceof Bullet){
             DrawCanvas.score++;
