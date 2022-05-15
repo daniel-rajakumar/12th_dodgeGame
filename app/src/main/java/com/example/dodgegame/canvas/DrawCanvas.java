@@ -25,7 +25,7 @@ public class DrawCanvas {
     Context context;
     Canvas canvas;
     static int score, highScore = Integer.MIN_VALUE;
-    static int time, total_time = 10;
+    static int time, total_time = 20;
 
     int fontSize;
     static boolean gameOver = false;
