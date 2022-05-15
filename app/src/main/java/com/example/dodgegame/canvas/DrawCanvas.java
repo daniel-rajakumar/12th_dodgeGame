@@ -24,7 +24,7 @@ public class DrawCanvas {
     static LinkedList<Bullet> bullets = new LinkedList<>();
     Context context;
     Canvas canvas;
-    static int score;
+    static int score, highScore = Integer.MIN_VALUE;
     static int time, total_time = 10;
 
     int fontSize;
@@ -102,24 +102,33 @@ public class DrawCanvas {
         Bitmap image = Entity.images.get("endScreen");
         canvas.drawBitmap(image, new Matrix(),null);
 
+
         text = "score: " + score;
         canvas.drawText(text
                 , player.x_per(0.975) - (fontSize * text.length())
-                , player.y_per(0.7)
+                , player.y_per(0.8)
                 , paint);
+
+        paint.setTextSize(fontSize/=2);
+        text = "high Score: " + highScore;
+        canvas.drawText(text
+                , player.x_per(0.975) - (fontSize * text.length())
+                , player.y_per(0.8) + (fontSize * 2)
+                , paint);
+        paint.setTextSize(fontSize*=2);
 
         if (toggle % 100 < 50){
             paint.setTextSize(fontSize/=2);
             text = "Tap anywhere to";
             canvas.drawText(text
                     , player.x_per(0.975) - (fontSize * text.length())
-                    , player.y_per(0.8)
+                    , player.y_per(0.9)
                     , paint);
 
             text = " play again!";
             canvas.drawText(text
                     , player.x_per(0.975) - (fontSize * text.length())
-                    , player.y_per(0.8) + (fontSize * 2)
+                    , player.y_per(0.9) + (fontSize * 2)
                     , paint);
             paint.setTextSize(fontSize*=2);
         }
@@ -186,6 +195,8 @@ public class DrawCanvas {
                 if (--time > 0) return;
                 gameOver = true;
                 gameplay_music.pause();
+                if (score > highScore)
+                    highScore = score;
                 gameplay_music.seekTo(0);
                 endScreen_music.start();
             }
