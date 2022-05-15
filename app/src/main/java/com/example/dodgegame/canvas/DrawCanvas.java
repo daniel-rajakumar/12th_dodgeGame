@@ -159,10 +159,8 @@ public class DrawCanvas {
             public void run() {
                 if (--time > 0) return;
                 gameOver = true;
-                Log.d(TAG, "gameOver: " + "true");
-//                time = 0;
             }
-        }, 0, 10);
+        }, 0, 1000);
 
     }
 

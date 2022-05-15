@@ -22,7 +22,9 @@ public class Player extends Entity implements SensorEventListener2 {
         super(context, canvas);
         setImage(Direction.TOP, 3f);
         setMoveSpeed(15);
-        setLocation_byPercentage(0.5f, 0.8f);
+        do {
+            setLocation_byPixel(canvas.getWidth()/2, (int)(canvas.getHeight()*0.8));
+        } while (x == 0);
         setDamaged(false);
 
         SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
