@@ -52,6 +52,8 @@ public class Player extends Entity implements SensorEventListener2 {
         ));
     }
 
+
+
     void damagePlayer(){
         setDamaged(true);
         Log.d(TAG, "damagePlayer: " + "yes");
@@ -131,14 +133,14 @@ public class Player extends Entity implements SensorEventListener2 {
                 this.x + (width * 3),
                 this.y + (height * 4)));
 
-        for (int i = 0; i < DrawCanvas.enemies.size(); i++){
-            Rect temp = DrawCanvas.enemies.get(i).collision;
-            if (temp != null) {
-                if (Rect.intersects(collision, temp)){
-                    DrawCanvas.gameRunning = false;
-                }
-            }
-        }
+//        for (int i = 0; i < DrawCanvas.enemies.size(); i++){
+//            Rect temp = DrawCanvas.enemies.get(i).collision;
+//            if (temp != null) {
+//                if (Rect.intersects(collision, temp)){
+//                    DrawCanvas.gameRunning = false;
+//                }
+//            }
+//        }
     }
 
     @Override
