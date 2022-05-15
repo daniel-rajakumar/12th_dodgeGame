@@ -29,14 +29,14 @@ public class DrawCanvas {
     Context context;
     Canvas canvas;
     static int score, highScore = Integer.MIN_VALUE;
-    static int time, total_time = 15;
+    static int time, total_time = 30;
 
     int fontSize = 100;
     static GameScene gameScene = GameScene.START;
 //    static boolean endScreen = false, startScreen = false, gameScreen = true;
     static boolean grassAnimation = false;
 
-    static boolean start = true, game_start = true;
+    static boolean start = true, game_start = true, end_start = true;
 
     static boolean gameRunning = true;
     Paint paint = new Paint();
@@ -136,6 +136,10 @@ public class DrawCanvas {
 //        canvas.drawBitmap(image, new Matrix(),null);
         if (!grassAnimation){
             updateScreenText();
+            if (end_start){
+                endScreen_music.start();
+                end_start = false;
+            }
         }
     }
 
@@ -318,7 +322,6 @@ public class DrawCanvas {
                 if (score > highScore)
                     highScore = score;
                 gameplay_music.seekTo(0);
-                endScreen_music.start();
             }
         }, 0, 1000);
     }
@@ -335,13 +338,14 @@ public class DrawCanvas {
         score = 0;
         time = total_time;
         gameScene = GameScene.GAME;
+        bounceSpeed = 0;
+        grass_animation_count = 1.5f;
+        game_start = end_start = true;
+
+        // sounds
         endScreen_music.pause();
         endScreen_music.seekTo(0);
         gameplay_music.start();
-        bounceSpeed = 0;
-        grass_animation_count = 1.5f;
-        game_start = true;
-
         gameplay_music.setPlaybackParams(gameplay_music.getPlaybackParams().setSpeed(0.75f));
     }
 
