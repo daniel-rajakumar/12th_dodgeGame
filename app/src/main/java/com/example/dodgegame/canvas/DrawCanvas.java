@@ -32,11 +32,12 @@ public class DrawCanvas {
     static int time, total_time = 15;
 
     int fontSize;
-    static GameScene gameScene = GameScene.GAME;
+    static GameScene gameScene = GameScene.START;
 //    static boolean endScreen = false, startScreen = false, gameScreen = true;
     static boolean grassAnimation = false;
 
-    static boolean start = true, end = false;
+    static boolean start = true, game_start = true;
+
     static boolean gameRunning = true;
     Paint paint = new Paint();
     String text;
@@ -52,7 +53,6 @@ public class DrawCanvas {
             start = false;
             Entity.loadAllImages(context);
             player = new Player(context, canvas);
-            background();
             time = total_time;
             fontSize = 100;
             score = 0;
@@ -64,8 +64,8 @@ public class DrawCanvas {
 
         canvas.drawRGB(0,0,0);
 
-        grassAnimation();
         switch (gameScene){
+            case START: showStartScreen(); break;
             case GAME: showGamePlayScreen(); break;
             case END: showEndScreen(); break;
         }
@@ -76,9 +76,6 @@ public class DrawCanvas {
         fire_music = MediaPlayer.create(context,R.raw.fire);
         endScreen_music = MediaPlayer.create(context,R.raw.endscreen_music);
         hurt_music = MediaPlayer.create(context,R.raw.no);
-        gameplay_music.start();
-        gameplay_music.setLooping(true);
-        gameplay_music.setPlaybackParams(gameplay_music.getPlaybackParams().setSpeed(0.75f));
     }
 
     void updateMusic(){
@@ -96,12 +93,24 @@ public class DrawCanvas {
         }
     }
 
-    void grassAnimation(){
 
+    void showStartScreen(){
+        updateGrass();
+        toggle++;
 
+        if (!grassAnimation){
+            updateScreenText();
+        }
     }
 
     void showGamePlayScreen(){
+        if (game_start){ game_start = false;
+            gameplay_music.start();
+            gameplay_music.setLooping(true);
+            gameplay_music.setPlaybackParams(gameplay_music.getPlaybackParams().setSpeed(0.75f));
+            background();
+        }
+
         updateEnemies();
         updateBullets();
         player.update();
@@ -123,21 +132,21 @@ public class DrawCanvas {
 //        Bitmap image = Entity.images.get("endScreen");
 //        canvas.drawBitmap(image, new Matrix(),null);
         if (!grassAnimation){
-            updateEndScreenText();
+            updateScreenText();
         }
     }
 
 
-    public void updateEndScreenText(){
+    public void updateScreenText(){
         showPlayerSymbol();
-        text = "score: " + score;
+        text = "Score: " + (gameScene == GameScene.START ? "N/A" : score);
         canvas.drawText(text
                 , player.x_per(0.975) - (fontSize * text.length())
                 , player.y_per(0.1)
                 , paint);
 
         paint.setTextSize(fontSize/=2);
-        text = "high Score: " + highScore;
+        text = "High Score: " + (gameScene == GameScene.START ? "N/A" : highScore);
         canvas.drawText(text
                 , player.x_per(0.975) - (fontSize * text.length())
                 , player.y_per(0.1) + (fontSize * 2)
@@ -152,7 +161,7 @@ public class DrawCanvas {
                     , player.y_per(0.9)
                     , paint);
 
-            text = " play again!";
+            text = " play" + (gameScene == GameScene.START ? "!" : " again!");
             canvas.drawText(text
                     , player.x_per(0.975) - (fontSize * text.length())
                     , player.y_per(0.9) + (fontSize * 2)
@@ -267,10 +276,12 @@ public class DrawCanvas {
         }
     }
 
-    static float bounceSpeed = 0;
-    float bounceSize = 0;
-
     public void background(){
+        generateEnemies();
+        timerCountDown();
+    }
+
+    void generateEnemies(){
         int width = player.entity_width/4;
         int min = -width;
         int max = canvas.getWidth() - (width * 3);
@@ -278,10 +289,15 @@ public class DrawCanvas {
 
         new Timer().schedule(new TimerTask() {
             public void run() {
-                    if (player.isWalking) return;
-                    enemies.push(new Enemy(context, canvas, random(min, max),-offset * 2));
+                if (player.isWalking) return;
+                enemies.push(new Enemy(context, canvas, random(min, max),-offset * 2));
             }
         }, 0, 1000);
+    }
+
+    static float bounceSpeed = 0;
+    float bounceSize = 0;
+    void timerCountDown(){
 
         new Timer().schedule(new TimerTask() {
             public void run() {
@@ -291,7 +307,6 @@ public class DrawCanvas {
                 }
 
                 if (time > -1) return;
-//                endScreen = true;
                 gameScene = GameScene.END;
                 gameplay_music.pause();
                 if (score > highScore)
@@ -300,7 +315,6 @@ public class DrawCanvas {
                 endScreen_music.start();
             }
         }, 0, 1000);
-
     }
 
 
@@ -314,13 +328,13 @@ public class DrawCanvas {
         player = new Player(context, canvas);
         score = 0;
         time = total_time;
-//        endScreen = false;
         gameScene = GameScene.GAME;
         endScreen_music.pause();
         endScreen_music.seekTo(0);
         gameplay_music.start();
         bounceSpeed = 0;
         grass_animation_count = 1.5f;
+        game_start = true;
 
         gameplay_music.setPlaybackParams(gameplay_music.getPlaybackParams().setSpeed(0.75f));
     }

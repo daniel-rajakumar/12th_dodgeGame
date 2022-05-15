@@ -118,6 +118,12 @@ public class Player extends Entity implements SensorEventListener2 {
             DrawCanvas.resetGame(context, canvas);
             return;
         }
+
+        if (DrawCanvas.gameScene == GameScene.START){
+            DrawCanvas.gameScene = GameScene.GAME;
+            return;
+        }
+
         if (isPerformingAction() || isDamaged()) return;
         setPerformingAction(true);
 
