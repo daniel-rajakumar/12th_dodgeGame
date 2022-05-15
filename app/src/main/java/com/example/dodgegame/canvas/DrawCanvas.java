@@ -25,7 +25,7 @@ public class DrawCanvas {
     Context context;
     Canvas canvas;
     static int score, highScore = Integer.MIN_VALUE;
-    static int time, total_time = 20;
+    static int time, total_time = 17;
 
     int fontSize;
     static boolean gameOver = false;
@@ -77,7 +77,7 @@ public class DrawCanvas {
 //            mediaPlayer.setPlaybackParams(mediaPlayer.getPlaybackParams().setSpeed(2f));
 //        }
 
-        if ((total_time - time) == total_time*0.5){
+        if (time > 10 && (total_time - time) == total_time*0.5){
             gameplay_music.setPlaybackParams(gameplay_music.getPlaybackParams().setSpeed(1f));
         }
 
@@ -172,14 +172,27 @@ public class DrawCanvas {
 
     void updateTime(){
         text = String.valueOf(time);
+
+        bounceSize += bounceSpeed;
+        paint.setTextSize(paint.getTextSize() + bounceSize);
         canvas.drawText(text,
                 player.x_per(0.05),
-                player.y_per(0.075),
+                player.y_per(0.075) + bounceSize/2,
                 paint);
+        paint.setTextSize(paint.getTextSize() - bounceSize);
+
+        Log.d(TAG, "updateTime: bounce: " + bounceSpeed);
+
+        if (time < 10){
+            bounceSpeed *= 1.02;
+        }
     }
 
+    static float bounceSpeed = 0;
+    float bounceSize = 0;
+
     public void background(){
-        int width = (player.entity_width/4);
+        int width = player.entity_width/4;
         int min = -width;
         int max = canvas.getWidth() - (width * 3);
         int offset = player.entity_height;
@@ -192,7 +205,12 @@ public class DrawCanvas {
 
         new Timer().schedule(new TimerTask() {
             public void run() {
-                if (--time > 0) return;
+                if (--time < 10){
+                    bounceSpeed = 1;
+                    bounceSize = 0;
+                }
+
+                if (time > -1) return;
                 gameOver = true;
                 gameplay_music.pause();
                 if (score > highScore)
@@ -203,6 +221,7 @@ public class DrawCanvas {
         }, 0, 1000);
 
     }
+
 
     int random(int min, int max){
         return (int) (Math. random()*(max-min+1))+min;
@@ -218,8 +237,12 @@ public class DrawCanvas {
         endScreen_music.pause();
         endScreen_music.seekTo(0);
         gameplay_music.start();
+        bounceSpeed = 0;
+
         gameplay_music.setPlaybackParams(gameplay_music.getPlaybackParams().setSpeed(0.75f));
     }
+
+
 
 }
 
