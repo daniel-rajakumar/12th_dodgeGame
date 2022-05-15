@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.media.MediaPlayer;
 import android.util.Log;
@@ -107,6 +108,7 @@ public class DrawCanvas {
     void showEndScreen(){
         if (grassAnimation){
             updateEnemies();
+            updateBullets();
             player.update();
         }
         updateGrass();
@@ -120,22 +122,23 @@ public class DrawCanvas {
 
 
     public void updateEndScreenText(){
+        showPlayerSymbol();
         text = "score: " + score;
         canvas.drawText(text
                 , player.x_per(0.975) - (fontSize * text.length())
-                , player.y_per(0.5)
+                , player.y_per(0.1)
                 , paint);
 
         paint.setTextSize(fontSize/=2);
         text = "high Score: " + highScore;
         canvas.drawText(text
                 , player.x_per(0.975) - (fontSize * text.length())
-                , player.y_per(0.5) + (fontSize * 2)
+                , player.y_per(0.1) + (fontSize * 2)
                 , paint);
         paint.setTextSize(fontSize*=2);
 
         if (toggle % 100 < 50){
-            paint.setTextSize(fontSize/=2);
+            paint.setTextSize(fontSize/=1.5);
             text = "Tap anywhere to";
             canvas.drawText(text
                     , player.x_per(0.975) - (fontSize * text.length())
@@ -147,9 +150,26 @@ public class DrawCanvas {
                     , player.x_per(0.975) - (fontSize * text.length())
                     , player.y_per(0.9) + (fontSize * 2)
                     , paint);
-            paint.setTextSize(fontSize*=2);
+            paint.setTextSize(fontSize*=1.5);
         }
+    }
 
+    void showPlayerSymbol(){
+        int scalar = 6;
+        canvas.save();
+        canvas.translate(
+               canvas.getWidth()/2f - (DrawCanvas.player.sprite_width * scalar)/2f
+                , canvas.getHeight()/2f - (DrawCanvas.player.sprite_height * scalar)/2f
+        );
+        canvas.scale(scalar, scalar);
+        canvas.drawBitmap(
+                Bitmap.createBitmap(Entity.images.get("player")
+                        , DrawCanvas.player.sprite_width * 0
+                        , DrawCanvas.player.sprite_height * 2
+                        , DrawCanvas.player.sprite_width
+                        , DrawCanvas.player.sprite_height
+                ), new Matrix(), null);
+        canvas.restore();
     }
 
     public void updateBullets(){
