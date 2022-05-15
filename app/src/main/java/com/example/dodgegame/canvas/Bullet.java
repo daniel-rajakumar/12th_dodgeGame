@@ -13,7 +13,7 @@ public class Bullet extends Entity {
     Bullet(Context context, Canvas canvas, int x, int y){
         super(context, canvas);
         setImageBullet(0f);
-        setMoveSpeed(5);
+        setMoveSpeed(10);
         direction = Direction.TOP;
         setLocation_byPixel(x, y);
     }

@@ -29,9 +29,9 @@ public class DrawCanvas {
     Context context;
     Canvas canvas;
     static int score, highScore = Integer.MIN_VALUE;
-    static int time, total_time = 10;
+    static int time, total_time = 45;
 
-    int fontSize = 100;
+    int fontSize, original_fontSize = 100;
     static GameScene gameScene = GameScene.START;
     static boolean grassAnimation = false;
 
@@ -56,7 +56,7 @@ public class DrawCanvas {
             Entity.loadAllImages(context);
             player = new Player(context, canvas);
             time = total_time;
-            fontSize = 100;
+            fontSize = original_fontSize;
             score = 0;
             paint.setColor(Color.RED);
             paint.setTextSize(fontSize);
@@ -147,6 +147,7 @@ public class DrawCanvas {
 
     public void updateScreenText(){
         showPlayerSymbol();
+        paint.setTextSize(fontSize = original_fontSize);
         text = "Score: " + (gameScene == GameScene.START ? "N/A" : score);
         canvas.drawText(text
                 , player.x_per(0.975) - (fontSize * text.length())
