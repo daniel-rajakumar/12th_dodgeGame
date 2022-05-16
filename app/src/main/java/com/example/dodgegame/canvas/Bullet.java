@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 
 public class Bullet extends Entity {
-    private static final String TAG = "testing";
 
     Bullet(Context context, Canvas canvas, int x, int y){
         super(context, canvas);
@@ -39,8 +38,6 @@ public class Bullet extends Entity {
     }
 
     @Override
-    public void fire() {
-
-    }
+    public void fire() { }
 
 }

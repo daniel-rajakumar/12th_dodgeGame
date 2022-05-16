@@ -14,7 +14,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Player extends Entity implements SensorEventListener2 {
-    private static final String TAG = "testing";
     Timer damageCoolDown, blinkTimer;
     int coolDownTime = 5;
     boolean isWalking = true;
@@ -70,7 +69,6 @@ public class Player extends Entity implements SensorEventListener2 {
         blinkTimer = new Timer();
         blink = false;
         setDamaged(true);
-//        Log.d(TAG, "damagePlayer: " + "yes");
 
         damageCoolDown.cancel();
         damageCoolDown = new Timer();
@@ -87,7 +85,6 @@ public class Player extends Entity implements SensorEventListener2 {
     }
 
     void startBlinking(){
-        Log.d(TAG, "startBlinking: " + "blinking");
         blinkTimer.schedule(new TimerTask() {
             @Override
             public void run() {

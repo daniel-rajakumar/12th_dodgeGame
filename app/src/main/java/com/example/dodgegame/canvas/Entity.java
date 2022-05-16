@@ -19,7 +19,6 @@ enum Direction {
 }
 
 abstract public class Entity {
-    private static final String TAG = "test";
     Canvas canvas;
     Context context;
     Direction direction;
@@ -43,20 +42,15 @@ abstract public class Entity {
         performingAction = false;
     }
 
-    public void setImageBullet(float scaler){
-        this.scalar = scaler;
+    public void setImageBullet(float scalar){
+        this.scalar = scalar;
         this.image = images.get("bullet");
         this.sprite_width  = image.getWidth()/10;
         this.sprite_height = image.getHeight()/10;
-        this.entity_width = (int) (sprite_width * scaler);
-        this.entity_height = (int) (sprite_height * scaler);
+        this.entity_width = (int) (sprite_width * scalar);
+        this.entity_height = (int) (sprite_height * scalar);
     }
 
-    public void setImage(Bitmap image) {
-        this.image = image;
-    }
-
-    boolean blinkToggle;
     public void setImage(Direction direction, float scaler) {
         this.scalar = scaler;
         if (this instanceof Player) {
@@ -227,11 +221,6 @@ abstract public class Entity {
     public void setPerformingAction(boolean performingAction) {
         this.performingAction = performingAction;
     }
-
-    public void setScalar(float scalar) {
-        this.scalar = scalar;
-    }
-
 
     private boolean growing = true, growing_first = true;
     public void increaseScale(float increase, float max){

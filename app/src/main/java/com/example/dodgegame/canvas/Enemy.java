@@ -10,7 +10,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Enemy extends Entity {
-    private static final String TAG = "testing";
 
     Enemy(Context context, Canvas canvas, int x, int y){
         super(context, canvas);
@@ -24,11 +23,6 @@ public class Enemy extends Entity {
     void move() {
         if (direction == Direction.BOTTOM) moveBottom();
 
-//        setCollision(new Rect(
-//                this.x + (this.sprite_width/2),
-//                this.y + this.sprite_height,
-//                (this.x + (this.sprite_width/2)) + this.sprite_width/2,
-//                this.y + this.sprite_height * 2));
         int width = (this.entity_width/4);
         int height = (this.entity_height/4);
 
@@ -49,6 +43,7 @@ public class Enemy extends Entity {
         for (int i = 0; i < DrawCanvas.enemies.size(); i++){
             Rect temp1 = DrawCanvas.enemies.get(i).collision;
 
+            // check enemy vs. bullet collision
             for (int j = 0; j < DrawCanvas.bullets.size(); j++) {
                 Rect temp2 = DrawCanvas.bullets.get(j).collision;
 
@@ -58,6 +53,7 @@ public class Enemy extends Entity {
                     }
             }
 
+            // check enemy vs. player collision
             Rect temp3 = DrawCanvas.player.collision;
             if (temp1 != null && temp3 != null)
                 if (Rect.intersects(temp1, temp3)) {
@@ -67,14 +63,11 @@ public class Enemy extends Entity {
     }
 
     @Override
-    public void fire() {
-
-    }
+    public void fire() { }
 
     void removeEnemy(Enemy enemy, Entity entity){
         if (enemy.isHasTouched()) return;
 
-        Log.d(TAG, "removeEnemy: " + DrawCanvas.grassAnimation);
         if (!DrawCanvas.grassAnimation){
             if (entity instanceof Player){
                 DrawCanvas.score--;
@@ -104,7 +97,6 @@ public class Enemy extends Entity {
                 cancel();
             }
         }, 500, 500);
-
     }
 
 
