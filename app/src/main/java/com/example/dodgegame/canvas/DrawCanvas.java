@@ -31,7 +31,7 @@ public class DrawCanvas {
     Context context;
     Canvas canvas;
     static int score, highScore = Integer.MIN_VALUE;
-    static int time, total_time = 35;
+    static int time, total_time = 45;
 
     int fontSize, original_fontSize = 100;
     static GameScene gameScene = GameScene.START;

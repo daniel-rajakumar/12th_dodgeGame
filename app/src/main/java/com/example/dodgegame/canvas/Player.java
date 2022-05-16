@@ -187,7 +187,7 @@ public class Player extends Entity implements SensorEventListener2 {
         float x = sensorEvent.values[0];
 
         direction = Direction.TOP;
-        if (Math.abs(x) > 4f) {
+        if (Math.abs(x) > 5f) {
             setMoveSpeed(15);
             direction = (x < 0) ? Direction.RIGHT : Direction.LEFT;
         } else if (Math.abs(x) > 2f){
