@@ -293,16 +293,16 @@ public class DrawCanvas {
     }
 
     void updateScore(){
-        text = String.valueOf(score);
+        text = score + "\uD83E\uDDDF";
         paint.setTextSize(original_fontSize);
         canvas.drawText(text
-                , player.x_per(0.95) - (text.length() * fontSize)
+                , player.x_per(1.05) - (text.length() * fontSize)
                 , player.y_per(0.075)
                 , paint);
     }
 
     void updateTime(){
-        text = String.valueOf(time);
+        text = "⌛" + time;
 
         paint.setTextSize(original_fontSize + (bounceSize += bounceSpeed));
         canvas.drawText(text
