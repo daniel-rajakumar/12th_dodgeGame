@@ -94,6 +94,8 @@ abstract public class Entity {
         images.put("grass",  BitmapFactory.decodeResource(context.getResources(), R.drawable.grass));
         images.put("endScreen",  BitmapFactory.decodeResource(context.getResources(), R.drawable.end_screen));
         images.put("grass_long",  BitmapFactory.decodeResource(context.getResources(), R.drawable.grass_long));
+        images.put("water_bg",  BitmapFactory.decodeResource(context.getResources(), R.drawable.water_bg));
+        images.put("land_bg",  BitmapFactory.decodeResource(context.getResources(), R.drawable.land_bg));
     }
 
 
@@ -133,7 +135,7 @@ abstract public class Entity {
             int _w = sprite_width;
             int _h = sprite_height;
 
-            if (y < y_per(DrawCanvas.waterSize)){
+            if (y < y_per(DrawCanvas.waterSize - 0.1)){
                 _h/=2;
                 moveSpeed = moveSpeed_water;
             } else {
@@ -210,7 +212,7 @@ abstract public class Entity {
     public void setMoveSpeed(int moveSpeed) {
         this.moveSpeed = moveSpeed;
         this.moveSpeed_land = moveSpeed;
-        this.moveSpeed_water = moveSpeed/2;
+        this.moveSpeed_water = moveSpeed/3;
     }
 
 

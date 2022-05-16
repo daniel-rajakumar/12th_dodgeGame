@@ -50,7 +50,7 @@ public class DrawCanvas {
                  timer_time = new Timer();
 
     static Vibrator vibrator;
-    static float waterSize = 0.4f;
+    static float waterSize = 0.6f;
 
     public void update(Context context,Canvas canvas){
         this.context = context;
@@ -81,9 +81,21 @@ public class DrawCanvas {
     }
 
     void drawBackground(){
-        canvas.drawRGB(0, 0, 200);
-        paint.setColor(Color.YELLOW);
-        canvas.drawRect(new Rect(0, player.y_per(waterSize + 0.1), player.x_per(1), player.y_per(1)), paint);
+        // water
+        canvas.save();
+        canvas.scale(0.5f, waterSize);
+        canvas.drawBitmap(Entity.images.get("water_bg"), new Matrix(), null);
+        canvas.restore();
+
+        // grass
+//        paint.setColor(Color.YELLOW);
+//        canvas.drawRect(new Rect(0, player.y_per(waterSize + 0.1), player.x_per(1), player.y_per(1)), paint);
+        canvas.save();
+        canvas.translate(player.x_per(0), player.y_per(waterSize));
+        canvas.drawBitmap(Entity.images.get("land_bg"),
+                new Matrix(),
+                null);
+        canvas.restore();
     }
 
     void setUpMusic(){
