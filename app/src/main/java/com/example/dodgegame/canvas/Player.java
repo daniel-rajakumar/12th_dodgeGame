@@ -40,7 +40,7 @@ public class Player extends Entity implements SensorEventListener2 {
     void move() {
         if (direction == Direction.RIGHT) moveRight();
         if (direction == Direction.LEFT)  moveLeft();
-        if (isWalking)  moveTop();
+        if (isWalking)                    moveTop();
 
 //        updateCollision();
 
@@ -172,8 +172,10 @@ public class Player extends Entity implements SensorEventListener2 {
         direction = Direction.TOP;
         if (Math.abs(x) > 5f) {
             setMoveSpeed(15);
+            isWalkingFaster = true;
             direction = (x < 0) ? Direction.RIGHT : Direction.LEFT;
         } else if (Math.abs(x) > 2f){
+            isWalkingFaster = false;
             setMoveSpeed(5);
             direction = (x < 0) ? Direction.RIGHT : Direction.LEFT;
         }

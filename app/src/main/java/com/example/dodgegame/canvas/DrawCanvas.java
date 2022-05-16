@@ -248,8 +248,8 @@ public class DrawCanvas {
     }
 
     void updateGrass(){
-        Bitmap image = Entity.images.get("grass_long");
-         grassAnimate();
+        Bitmap image = Entity.images.get("grass");
+        grassAnimate();
         canvas.drawBitmap(image, 0, -image.getHeight() + player.y_per(grass_hideLength), null);
     }
 

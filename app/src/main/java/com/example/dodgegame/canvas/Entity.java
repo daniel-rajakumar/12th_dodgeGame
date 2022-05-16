@@ -24,7 +24,7 @@ abstract public class Entity {
     Context context;
     Direction direction;
     int moveSpeed, moveSpeed_water, moveSpeed_land;
-    int drawable;
+    boolean isWalkingFaster, inWater;
     int x, y;
     int sprite_width, sprite_height;
     int entity_width, entity_height;
@@ -34,9 +34,7 @@ abstract public class Entity {
     boolean toRemove, isDamaged, hasTouched, performingAction;
     static Map<String, Bitmap> images = new HashMap<>();
     Bitmap image;
-    float scaler;
-    boolean inWater;
-
+    float scalar;
 
     public Entity(Context context, Canvas canvas) {
         this.canvas = canvas;
@@ -46,7 +44,7 @@ abstract public class Entity {
     }
 
     public void setImageBullet(float scaler){
-        this.scaler = scaler;
+        this.scalar = scaler;
         this.image = images.get("bullet");
         this.sprite_width  = image.getWidth()/10;
         this.sprite_height = image.getHeight()/10;
@@ -60,7 +58,7 @@ abstract public class Entity {
 
     boolean blinkToggle;
     public void setImage(Direction direction, float scaler) {
-        this.scaler = scaler;
+        this.scalar = scaler;
         if (this instanceof Player) {
             if (isDamaged) {
                 if (DrawCanvas.player.blink) {
@@ -78,7 +76,7 @@ abstract public class Entity {
             case LEFT:   this.sprite_x_max = 8; sprite_y = 9;  break;
             case RIGHT:  this.sprite_x_max = 8; sprite_y = 11;  break;
             case BOTTOM: this.sprite_x_max = 8; sprite_y = 10;  break;
-            case TOP:    this.sprite_x_max = 8; sprite_y = 8; break;
+            case TOP:    this.sprite_x_max = 1; sprite_y = 8; break;
         }
 
         this.sprite_width  = (image.getWidth()  / 13);
@@ -93,16 +91,8 @@ abstract public class Entity {
         images.put("enemy",  BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_enemy));
         images.put("bullet",  BitmapFactory.decodeResource(context.getResources(), R.drawable.bullet));
         images.put("grass",  BitmapFactory.decodeResource(context.getResources(), R.drawable.grass));
-        images.put("endScreen",  BitmapFactory.decodeResource(context.getResources(), R.drawable.end_screen));
-        images.put("grass_long",  BitmapFactory.decodeResource(context.getResources(), R.drawable.grass_long));
         images.put("water_bg",  BitmapFactory.decodeResource(context.getResources(), R.drawable.water_bg));
         images.put("land_bg",  BitmapFactory.decodeResource(context.getResources(), R.drawable.land_bg));
-    }
-
-
-    void setLocation_byPercentage(float x, float y){
-        this.x = x_per(x);
-        this.y = y_per(y);
     }
 
     void setLocation_byPixel(int x, int y){
@@ -110,46 +100,39 @@ abstract public class Entity {
         this.y = y;
     }
 
-    public void setDrawable(int drawable) {
-        this.image = BitmapFactory.decodeResource(context.getResources(), drawable);
-    }
-
     void draw(){
         inWater = y < y_per(DrawCanvas.waterSize - 0.1);
 
         canvas.save();
         canvas.translate(x, y);
-        canvas.scale(scaler, scaler);
+        canvas.scale(scalar, scalar);
 
-        if (this instanceof Bullet) {
-            canvas.drawBitmap(image, new Matrix(), null);
-        } else {
-//            canvas.drawBitmap(
-//                    Bitmap.createBitmap(this.image
-//                            , (sprite_width/4) + (sprite_width *  (1 + sprite_x))
-//                            , (sprite_height/4) + (sprite_height * sprite_y)
-//                            , sprite_width -  (sprite_width/4)
-//                            , sprite_height - (sprite_height/4))
-//                    , new Matrix(), null);
-//
+        if (this instanceof Bullet)  drawBullet();
+        else                         drawEnemy_and_player();
 
-            int _x = sprite_width * (1 + sprite_x);
-            int _y = sprite_height * sprite_y;
-            int _w = sprite_width;
-            int _h = sprite_height;
-            if (inWater){
-                _h/=2;
-                moveSpeed = moveSpeed_water;
-            } else {
-                moveSpeed = moveSpeed_land;
-            }
-
-            canvas.drawBitmap(Bitmap.createBitmap(this.image, _x, _y, _w, _h), new Matrix(), null);
-        }
         canvas.restore();
     }
 
-     abstract void move();
+    void drawBullet(){
+        canvas.drawBitmap(image, new Matrix(), null);
+    }
+
+    void drawEnemy_and_player(){
+        int _x = sprite_width * (1 + sprite_x);
+        int _y = sprite_height * sprite_y;
+        int _w = sprite_width;
+        int _h = sprite_height;
+        if (inWater){
+            _h/=2;
+            moveSpeed = moveSpeed_water;
+        } else {
+            moveSpeed = moveSpeed_land;
+        }
+
+        canvas.drawBitmap(Bitmap.createBitmap(this.image, _x, _y, _w, _h), new Matrix(), null);
+    }
+
+    abstract void move();
     abstract void checkIsAlive();
 
     void update(){
@@ -158,15 +141,15 @@ abstract public class Entity {
             move();
         }
         draw();
-
         checkIsAlive();
+
 //        showCollision();
+
         if (!(this instanceof Bullet))
             if (!isPerformingAction()){
                 if (!isHasTouched()){
-                    if (count % 10 == 0)
+                    if (count % (isWalkingFaster ? moveSpeed_water/2 : moveSpeed_land*2) == 0)
                         sprite_x++;
-
                     sprite_x %= sprite_x_max;
                 }
             }
@@ -184,16 +167,12 @@ abstract public class Entity {
     void moveLeft(){
         int width = (this.entity_width/4);
         if (x + width < x_per(0)) return;
-
         x -= moveSpeed;
     }
 
     void moveRight(){
         int width = (this.entity_width/4);
-        if (x + (width * 3) > x_per(1)){
-            return;
-        }
-
+        if (x + (width * 3) > x_per(1)) return;
         x += moveSpeed;
     }
 
@@ -249,21 +228,21 @@ abstract public class Entity {
         this.performingAction = performingAction;
     }
 
-    public void setScaler(float scaler) {
-        this.scaler = scaler;
+    public void setScalar(float scalar) {
+        this.scalar = scalar;
     }
 
 
     private boolean growing = true, growing_first = true;
     public void increaseScale(float increase, float max){
-        if (scaler     > max)   { growing = false; growing_first = false; }
-        if (scaler*1.1 < max)     growing = true;
+        if (scalar > max)   { growing = false; growing_first = false; }
+        if (scalar *1.1 < max)     growing = true;
 
 
         if (!growing_first) increase/=2;
 
-        if (growing) scaler+=increase;
-        else         scaler-=increase;
+        if (growing) scalar +=increase;
+        else         scalar -=increase;
     }
 
     public void setDamaged(boolean damaged) {
