@@ -30,9 +30,8 @@ public class DrawCanvas {
     Paint paint;
     String text;
     static int score, highScore = Integer.MIN_VALUE;
-    static int time, total_time = 45;
-    int fontSize, original_fontSize = 100;
     static GameScene gameScene;
+    static Vibrator vibrator;
     static boolean grassAnimation = false;
     static boolean startScreen_start = true,
                    gameScreen_start = true,
@@ -43,10 +42,12 @@ public class DrawCanvas {
                        hurt_music;
     static Timer timer_enemy = new Timer(),
                  timer_time = new Timer();
-    static float grass_hideLength = 1.5f;
 
-    static Vibrator vibrator;
+    static float cloud_hideLength = 4f;
+    static float cloud_scalar = 0.3f;
     static float waterSize = 0.6f;
+    int fontSize, original_fontSize = 100;
+    static int time, total_time = 45;
 
     public void update(Context context,Canvas canvas){
         this.context = context;
@@ -248,9 +249,20 @@ public class DrawCanvas {
     }
 
     void updateGrass(){
-        Bitmap image = Entity.images.get("grass");
+
+        Bitmap _image = Entity.images.get("cloud");
         grassAnimate();
-        canvas.drawBitmap(image, 0, -image.getHeight() + player.y_per(grass_hideLength), null);
+        canvas.save();
+        canvas.scale(cloud_scalar, cloud_scalar);
+        canvas.drawBitmap(
+                _image
+                , 0
+                , -_image.getHeight() + player.y_per(cloud_hideLength)
+                , null);
+        canvas.restore();
+
+
+
     }
 
     void grassAnimate(){
@@ -262,8 +274,8 @@ public class DrawCanvas {
     }
 
     void grassHide(){
-        if (grass_hideLength >= 0.5){
-            grass_hideLength -= 0.01;
+        if (cloud_hideLength >= 0.75){
+            cloud_hideLength -= 0.025;
             grassAnimation = true;
             return;
         }
@@ -271,8 +283,8 @@ public class DrawCanvas {
     }
 
     void grassShow(){
-        if (grass_hideLength <= 1.5f){
-            grass_hideLength += 0.01;
+        if (cloud_hideLength <= 4){
+            cloud_hideLength += 0.025;
             grassAnimation = true;
             return;
         }
@@ -358,7 +370,7 @@ public class DrawCanvas {
         time = total_time;
         gameScene = GameScene.GAME;
         bounceSpeed = 0;
-        grass_hideLength = 1.5f;
+        cloud_hideLength = 4f;
         gameScreen_start = true;
         endScreen_start = true;
 

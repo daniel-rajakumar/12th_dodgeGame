@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 
 import com.example.dodgegame.R;
 
@@ -84,7 +85,7 @@ abstract public class Entity {
         images.put("player", BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_player));
         images.put("enemy",  BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_enemy));
         images.put("bullet",  BitmapFactory.decodeResource(context.getResources(), R.drawable.bullet));
-        images.put("grass",  BitmapFactory.decodeResource(context.getResources(), R.drawable.grass));
+        images.put("cloud",  BitmapFactory.decodeResource(context.getResources(), R.drawable.cloud));
         images.put("water_bg",  BitmapFactory.decodeResource(context.getResources(), R.drawable.water_bg));
         images.put("land_bg",  BitmapFactory.decodeResource(context.getResources(), R.drawable.land_bg));
     }
@@ -109,6 +110,7 @@ abstract public class Entity {
 
     void drawBullet(){
         canvas.drawBitmap(image, new Matrix(), null);
+        Log.d("TAG", "drawBullet: " + canvas.getWidth());
     }
 
     void drawEnemy_and_player(){
