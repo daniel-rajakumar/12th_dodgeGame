@@ -102,6 +102,11 @@ public class Player extends Entity implements SensorEventListener2 {
     }
 
     void fireBullet(){
+        this.direction = Direction.NONE;
+        this.sprite_x = 0;
+        this.sprite_x_max = 4;
+        this.sprite_y = 12;
+
         DrawCanvas.fire_music.start();
         DrawCanvas.vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE));
 
@@ -131,35 +136,22 @@ public class Player extends Entity implements SensorEventListener2 {
 
         if (isPerformingAction() || isDamaged()) return;
         setPerformingAction(true);
-
-        this.direction = Direction.NONE;
-        this.sprite_x = 0;
-        this.sprite_x_max = 4;
-        this.sprite_y = 12;
         fireBullet();
+        animateShootingAction();
+    }
 
+    void animateShootingAction(){
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                Log.d(TAG, "fire: sprite_x: " + sprite_x + " | x_max: " + sprite_x_max);
                 if (++sprite_x < sprite_x_max) return;
-                Log.d(TAG, "fire: cancel");
                 setPerformingAction(false);
                 cancel();
             }
         }, 0, 200);
-        Log.d(TAG, "fire: Hello world");
-
     }
 
     void updateCollision(){
-//        setCollision(new Rect(
-//                this.x + (this.sprite_width/2),
-//                this.y + this.sprite_height,
-//                (this.x + (this.sprite_width/2)) + this.sprite_width/2,
-//                this.y + this.sprite_height * 2));
-
-
         int width = (this.entity_width/4);
         int height = (this.entity_height/4);
 
@@ -168,15 +160,6 @@ public class Player extends Entity implements SensorEventListener2 {
                 this.y + (height),
                 this.x + (width * 3),
                 this.y + (height * 4)));
-
-//        for (int i = 0; i < DrawCanvas.enemies.size(); i++){
-//            Rect temp = DrawCanvas.enemies.get(i).collision;
-//            if (temp != null) {
-//                if (Rect.intersects(collision, temp)){
-//                    DrawCanvas.gameRunning = false;
-//                }
-//            }
-//        }
     }
 
     @Override

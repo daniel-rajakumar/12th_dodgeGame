@@ -6,10 +6,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
-import android.util.Log;
 
 import androidx.core.content.res.ResourcesCompat;
 
@@ -24,30 +22,28 @@ enum GameScene {
 }
 
 public class DrawCanvas {
-    private static final String TAG = "Test";
     public static Player player;
     static LinkedList<Enemy> enemies = new LinkedList<>();
     static LinkedList<Bullet> bullets = new LinkedList<>();
     Context context;
     Canvas canvas;
+    Paint paint;
+    String text;
     static int score, highScore = Integer.MIN_VALUE;
     static int time, total_time = 45;
-
     int fontSize, original_fontSize = 100;
-    static GameScene gameScene = GameScene.START;
+    static GameScene gameScene;
     static boolean grassAnimation = false;
-
-    static boolean start = true, game_start = true, end_start = true;
-
-    static boolean gameRunning = true;
-    Paint paint = new Paint();
-    String text;
-    static MediaPlayer gameplay_music, endScreen_music, fire_music, hurt_music;
-    float count = 1;
-    static float grass_animation_count = 1.5f;
-
+    static boolean startScreen_start = true,
+                   gameScreen_start = true,
+                   endScreen_start = true;
+    static MediaPlayer gameplay_music,
+                       endScreen_music,
+                       fire_music,
+                       hurt_music;
     static Timer timer_enemy = new Timer(),
                  timer_time = new Timer();
+    static float grass_hideLength = 1.5f;
 
     static Vibrator vibrator;
     static float waterSize = 0.6f;
@@ -56,23 +52,10 @@ public class DrawCanvas {
         this.context = context;
         this.canvas = canvas;
 
-        if (start){
-            start = false;
-            Entity.loadAllImages(context);
-            player = new Player(context, canvas);
-            time = total_time;
-            fontSize = original_fontSize;
-            score = 0;
-            paint.setColor(Color.RED);
-            paint.setTextSize(fontSize);
-            paint.setTypeface(ResourcesCompat.getFont(context, R.font.font_1));
-            setUpMusic();
-            vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        if (startScreen_start){
+            startingGameSetUp();
         }
-
-
         drawBackground();
-
         switch (gameScene){
             case START: showStartScreen(); break;
             case GAME: showGamePlayScreen(); break;
@@ -80,16 +63,40 @@ public class DrawCanvas {
         }
     }
 
-    void drawBackground(){
-        // water
-        canvas.save();
-        canvas.scale(0.5f, waterSize);
-        canvas.drawBitmap(Entity.images.get("water_bg"), new Matrix(), null);
-        canvas.restore();
+    void startingGameSetUp(){
+        paint = new Paint();
+        startScreen_start = false;
+        gameScene = GameScene.START;
+        Entity.loadAllImages(context);
+        player = new Player(context, canvas);
+        time = total_time;
+        fontSize = original_fontSize;
+        score = 0;
+        paint.setColor(Color.RED);
+        paint.setTextSize(fontSize);
+        paint.setTypeface(ResourcesCompat.getFont(context, R.font.font_1));
+        setUpMusic();
+        vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+    }
 
-        // grass
-//        paint.setColor(Color.YELLOW);
-//        canvas.drawRect(new Rect(0, player.y_per(waterSize + 0.1), player.x_per(1), player.y_per(1)), paint);
+    void drawBackground(){
+        draw_background_water();
+        draw_background_land();
+    }
+
+    void draw_background_water(){
+        canvas.save();
+        Bitmap _image = Entity.images.get("water_bg");
+        int _x = 0;
+        int _y = 0;
+        int _w = player.x_per(1);
+        int _h = player.y_per(waterSize + 0.1);
+        canvas.drawBitmap(Bitmap.createBitmap(_image, _x, _y, _w, _h), new Matrix(), null);
+        canvas.restore();
+    }
+
+
+    void draw_background_land(){
         canvas.save();
         canvas.translate(player.x_per(0), player.y_per(waterSize));
         canvas.drawBitmap(Entity.images.get("land_bg"),
@@ -97,7 +104,6 @@ public class DrawCanvas {
                 null);
         canvas.restore();
     }
-
     void setUpMusic(){
         gameplay_music = MediaPlayer.create(context,R.raw.gameplay_music);
         fire_music = MediaPlayer.create(context,R.raw.fire);
@@ -106,11 +112,6 @@ public class DrawCanvas {
     }
 
     void updateMusic(){
-        Log.d(TAG, "music: " + (total_time - time) + " == " + (total_time/2));
-//        if (total_time/time > 2){
-//            mediaPlayer.setPlaybackParams(mediaPlayer.getPlaybackParams().setSpeed(2f));
-//        }
-
         if (time > 10 && (total_time - time) == total_time*0.5){
             gameplay_music.setPlaybackParams(gameplay_music.getPlaybackParams().setSpeed(1f));
         }
@@ -123,7 +124,7 @@ public class DrawCanvas {
 
     void showStartScreen(){
         updateGrass();
-        toggle++;
+        toggle_tapAnywhereText++;
 
         if (!grassAnimation){
             updateScreenText();
@@ -131,11 +132,11 @@ public class DrawCanvas {
     }
 
     void showGamePlayScreen(){
-        if (game_start){ game_start = false;
+        if (gameScreen_start){ gameScreen_start = false;
             gameplay_music.start();
             gameplay_music.setLooping(true);
             gameplay_music.setPlaybackParams(gameplay_music.getPlaybackParams().setSpeed(0.75f));
-            background();
+            background_tasks();
         }
 
         updateEnemies();
@@ -147,7 +148,7 @@ public class DrawCanvas {
         updateMusic();
     }
 
-    int toggle = 0;
+    int toggle_tapAnywhereText = 0;
     void showEndScreen(){
         if (grassAnimation){
             updateEnemies();
@@ -155,15 +156,13 @@ public class DrawCanvas {
             player.update();
         }
         updateGrass();
-        toggle++;
-//        Bitmap image = Entity.images.get("endScreen");
-//        canvas.drawBitmap(image, new Matrix(),null);
+
         if (!grassAnimation){
             updateScreenText();
-            if (end_start){
+            if (endScreen_start){
                 if (gameScene == GameScene.END){
                     endScreen_music.start();
-                    end_start = false;
+                    endScreen_start = false;
                 }
             }
         }
@@ -172,13 +171,21 @@ public class DrawCanvas {
 
     public void updateScreenText(){
         showPlayerSymbol();
+        showText_score();
+        showText_highScore();
+        if (++toggle_tapAnywhereText % 20 < 10) showText_TapAnywhere();
+    }
+
+    void showText_score(){
         paint.setTextSize(fontSize = original_fontSize);
         text = "Score: " + (gameScene == GameScene.END ? score :  "N/A");
         canvas.drawText(text
                 , player.x_per(0.975) - (fontSize * text.length())
                 , player.y_per(0.1)
                 , paint);
+    }
 
+    void showText_highScore(){
         paint.setTextSize(fontSize/=2);
         text = "High Score: " + (gameScene == GameScene.END ? highScore : "N/A");
         canvas.drawText(text
@@ -186,35 +193,35 @@ public class DrawCanvas {
                 , player.y_per(0.1) + (fontSize * 2)
                 , paint);
         paint.setTextSize(fontSize*=2);
+    }
 
-        if (toggle % 100 < 50){
-            paint.setTextSize(fontSize/=1.5);
-            text = "Tap anywhere to";
-            canvas.drawText(text
-                    , player.x_per(0.975) - (fontSize * text.length())
-                    , player.y_per(0.9)
-                    , paint);
+    void showText_TapAnywhere(){
+        paint.setTextSize(fontSize/=1.5);
+        text = "Tap anywhere to";
+        canvas.drawText(text
+                , player.x_per(0.975) - (fontSize * text.length())
+                , player.y_per(0.9)
+                , paint);
 
-            text = " play " + (gameScene == GameScene.END ? "again!" : "!");
-            canvas.drawText(text
-                    , player.x_per(0.975) - (fontSize * text.length())
-                    , player.y_per(0.9) + (fontSize * 2)
-                    , paint);
-            paint.setTextSize(fontSize*=1.5);
-        }
+        text = " play " + (gameScene == GameScene.END ? "again!" : "!");
+        canvas.drawText(text
+                , player.x_per(0.975) - (fontSize * text.length())
+                , player.y_per(0.9) + (fontSize * 2)
+                , paint);
+        paint.setTextSize(fontSize*=1.5);
     }
 
     void showPlayerSymbol(){
         int scalar = 6;
         canvas.save();
         canvas.translate(
-               canvas.getWidth()/2f - (DrawCanvas.player.sprite_width * scalar)/2f
-                , canvas.getHeight()/2f - (DrawCanvas.player.sprite_height * scalar)/2f
+                 canvas.getWidth() /2f - (DrawCanvas.player.sprite_width  * scalar)/2f
+                ,canvas.getHeight()/2f - (DrawCanvas.player.sprite_height * scalar)/2f
         );
         canvas.scale(scalar, scalar);
         canvas.drawBitmap(
                 Bitmap.createBitmap(Entity.images.get("player")
-                        , DrawCanvas.player.sprite_width * 0
+                        , 0
                         , DrawCanvas.player.sprite_height * 2
                         , DrawCanvas.player.sprite_width
                         , DrawCanvas.player.sprite_height
@@ -227,11 +234,8 @@ public class DrawCanvas {
             if (bullets.get(i).isToRemove())
                 bullets.remove(i);
 
-
-        for (int i = 0; i < bullets.size(); i++) {
+        for (int i = 0; i < bullets.size(); i++)
             bullets.get(i).update();
-        }
-
     }
 
     public void updateEnemies(){
@@ -239,22 +243,17 @@ public class DrawCanvas {
             if (enemies.get(i).isToRemove())
                 enemies.remove(i);
 
-
-        for (int i = 0; i < enemies.size(); i++) {
+        for (int i = 0; i < enemies.size(); i++)
             enemies.get(i).update();
-        }
     }
 
     void updateGrass(){
         Bitmap image = Entity.images.get("grass_long");
-        Log.d(TAG, "updateGrass: " + grass_animation_count);
-
          grassAnimate();
-        canvas.drawBitmap(image, 0, -image.getHeight() + player.y_per(grass_animation_count), null);
+        canvas.drawBitmap(image, 0, -image.getHeight() + player.y_per(grass_hideLength), null);
     }
 
     void grassAnimate(){
-        Log.d(TAG, "grass: scene: " + gameScene + " | count: " + grass_animation_count);
         switch (gameScene){
             case START: case END:
                 grassShow(); break;
@@ -263,24 +262,20 @@ public class DrawCanvas {
     }
 
     void grassHide(){
-        if (grass_animation_count >= 0.5){
-            grass_animation_count -= 0.01;
-            Log.d(TAG, "scene: grass -> " + "hiding");
+        if (grass_hideLength >= 0.5){
+            grass_hideLength -= 0.01;
             grassAnimation = true;
             return;
         }
-        Log.d(TAG, "scene: grass -> " + "noting");
         grassAnimation = false;
     }
 
     void grassShow(){
-        if (grass_animation_count <= 1.5f){
-            grass_animation_count += 0.01;
-            Log.d(TAG, "scene: grass -> " + "showing");
+        if (grass_hideLength <= 1.5f){
+            grass_hideLength += 0.01;
             grassAnimation = true;
             return;
         }
-        Log.d(TAG, "scene: grass -> " + "noting");
         grassAnimation = false;
     }
 
@@ -303,16 +298,11 @@ public class DrawCanvas {
                 , paint);
         paint.setTextSize(paint.getTextSize() - bounceSize);
 
-        Log.d(TAG, "updateTime: bounce: " + bounceSpeed);
-
-        if (time < 10){
-            bounceSpeed *= 1.02;
-        } else {
-            bounceSpeed = 0;
-        }
+        if (time < 10) bounceSpeed *= 1.02;
+        else           bounceSpeed  = 0;
     }
 
-    public void background(){
+    public void background_tasks(){
         generateEnemies();
         timerCountDown();
     }
@@ -368,9 +358,9 @@ public class DrawCanvas {
         time = total_time;
         gameScene = GameScene.GAME;
         bounceSpeed = 0;
-        grass_animation_count = 1.5f;
-        game_start = true;
-        end_start = true;
+        grass_hideLength = 1.5f;
+        gameScreen_start = true;
+        endScreen_start = true;
 
         // sounds
         endScreen_music.pause();
