@@ -328,9 +328,9 @@ public class DrawCanvas {
         timer_enemy.schedule(new TimerTask() {
             public void run() {
                 if (player.isWalking) return;
-                enemies.push(new Enemy(context, canvas, random(min, max),-offset * 2));
+                enemies.push(new Enemy(context, canvas, random(min, max),0));
             }
-        }, 0, 1000);
+        }, 0, 2000);
     }
 
     static float bounceSpeed = 0;

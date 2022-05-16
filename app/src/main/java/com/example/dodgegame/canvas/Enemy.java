@@ -36,7 +36,7 @@ public class Enemy extends Entity {
                 this.x + (width),
                 this.y + (height),
                 this.x + (width * 3),
-                this.y + (height * 8)/3
+                this.y + (height * 8)/ (inWater ? 5 : 3)
         ));
     }
 
@@ -93,7 +93,7 @@ public class Enemy extends Entity {
     void dieAnimation(Enemy enemy){
         enemy.direction = Direction.NONE;
         enemy.sprite_x = 0;
-        enemy.sprite_x_max = 5;
+        enemy.sprite_x_max = enemy.inWater ? 2 : 5;
         enemy.sprite_y = 20;
 
         new Timer().schedule(new TimerTask() {

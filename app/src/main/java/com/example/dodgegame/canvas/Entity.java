@@ -35,6 +35,7 @@ abstract public class Entity {
     static Map<String, Bitmap> images = new HashMap<>();
     Bitmap image;
     float scaler;
+    boolean inWater;
 
 
     public Entity(Context context, Canvas canvas) {
@@ -114,6 +115,8 @@ abstract public class Entity {
     }
 
     void draw(){
+        inWater = y < y_per(DrawCanvas.waterSize - 0.1);
+
         canvas.save();
         canvas.translate(x, y);
         canvas.scale(scaler, scaler);
@@ -134,8 +137,7 @@ abstract public class Entity {
             int _y = sprite_height * sprite_y;
             int _w = sprite_width;
             int _h = sprite_height;
-
-            if (y < y_per(DrawCanvas.waterSize - 0.1)){
+            if (inWater){
                 _h/=2;
                 moveSpeed = moveSpeed_water;
             } else {
