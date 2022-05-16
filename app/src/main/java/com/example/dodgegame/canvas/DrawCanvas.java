@@ -43,7 +43,7 @@ public class DrawCanvas {
     static Timer timer_enemy = new Timer(),
                  timer_time = new Timer();
 
-    static float cloud_hideLength = 4f;
+    static float cloud_hideLength, original_cloud_hideLength = 4f;
     static float cloud_scalar = 0.3f;
     static float waterSize = 0.6f;
     int fontSize, original_fontSize = 100;
@@ -69,6 +69,7 @@ public class DrawCanvas {
         startScreen_start = false;
         gameScene = GameScene.START;
         Entity.loadAllImages(context);
+        cloud_hideLength = original_cloud_hideLength;
         player = new Player(context, canvas);
         time = total_time;
         fontSize = original_fontSize;
@@ -274,7 +275,7 @@ public class DrawCanvas {
     }
 
     void grassHide(){
-        if (cloud_hideLength >= 0.75){
+        if (cloud_hideLength >= (original_cloud_hideLength/6f)){
             cloud_hideLength -= 0.025;
             grassAnimation = true;
             return;
@@ -283,7 +284,7 @@ public class DrawCanvas {
     }
 
     void grassShow(){
-        if (cloud_hideLength <= 4){
+        if (cloud_hideLength <= original_cloud_hideLength){
             cloud_hideLength += 0.025;
             grassAnimation = true;
             return;
@@ -370,7 +371,7 @@ public class DrawCanvas {
         time = total_time;
         gameScene = GameScene.GAME;
         bounceSpeed = 0;
-        cloud_hideLength = 4f;
+        cloud_hideLength = original_cloud_hideLength;
         gameScreen_start = true;
         endScreen_start = true;
 
