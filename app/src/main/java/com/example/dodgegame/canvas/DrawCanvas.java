@@ -333,7 +333,7 @@ public class DrawCanvas {
                 if (player.isWalking) return;
                 enemies.push(new Enemy(context, canvas, random(min, max),0));
             }
-        }, 0, 2000);
+        }, 0, 1000);
     }
 
     static float bounceSpeed = 0;
