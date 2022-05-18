@@ -114,6 +114,7 @@ abstract public class Entity {
     }
 
     void drawEnemy_and_player(){
+
         int _x = sprite_width * (1 + sprite_x);
         int _y = sprite_height * sprite_y;
         int _w = sprite_width;
@@ -125,7 +126,6 @@ abstract public class Entity {
             if (this instanceof Enemy) isWalkingFaster = true;
             moveSpeed = moveSpeed_land;
         }
-
 
         canvas.drawBitmap(Bitmap.createBitmap(this.image, _x, _y, _w, _h), new Matrix(), null);
     }

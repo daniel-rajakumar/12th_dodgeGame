@@ -328,7 +328,6 @@ public class DrawCanvas {
         int width = player.entity_width/4;
         int min = -width;
         int max = canvas.getWidth() - (width * 3);
-        int offset = player.entity_height;
 
         timer_enemy.cancel();
         timer_enemy = new Timer();
