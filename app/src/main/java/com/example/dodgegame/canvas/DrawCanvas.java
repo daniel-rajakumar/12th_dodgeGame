@@ -8,6 +8,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
+import android.util.Log;
 
 import androidx.core.content.res.ResourcesCompat;
 
@@ -22,6 +23,7 @@ enum GameScene {
 }
 
 public class DrawCanvas {
+    private static final String TAG = "test";
     public static Player player;
     static LinkedList<Enemy> enemies = new LinkedList<>();
     static LinkedList<Bullet> bullets = new LinkedList<>();
@@ -114,7 +116,9 @@ public class DrawCanvas {
     }
 
     void updateMusic(){
-        if (time > 10 && (total_time - time) == total_time*0.5){
+        Log.d(TAG, "updateMusic: " + time + " = " + (total_time * 0.5));
+        if (time > 10 && (time) == Math.floor(total_time*0.5)){
+            Log.d(TAG, "updateMusic: " + "yes");
             gameplay_music.setPlaybackParams(gameplay_music.getPlaybackParams().setSpeed(1f));
         }
 

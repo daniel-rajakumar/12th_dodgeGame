@@ -122,8 +122,10 @@ abstract public class Entity {
             _h/=2;
             moveSpeed = moveSpeed_water;
         } else {
+            if (this instanceof Enemy) isWalkingFaster = true;
             moveSpeed = moveSpeed_land;
         }
+
 
         canvas.drawBitmap(Bitmap.createBitmap(this.image, _x, _y, _w, _h), new Matrix(), null);
     }
