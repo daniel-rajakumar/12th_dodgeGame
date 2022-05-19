@@ -40,7 +40,8 @@ public class DrawCanvas {
                        fire_music,
                        hurt_music;
     static Timer timer_enemy = new Timer(),
-                 timer_time = new Timer();
+                 timer_time = new Timer(),
+                timer_animate_symbol = new Timer();
 
     static float cloud_hideLength, original_cloud_hideLength = 4f;
     static float cloud_scalar = 0.3f;
@@ -48,6 +49,7 @@ public class DrawCanvas {
     int fontSize, original_fontSize = 100;
     static int time, total_time = 15;
     public static boolean team_one;
+    private float symbol_scale = 6;
 
     public void update(Context context,Canvas canvas){
         this.context = context;
@@ -78,6 +80,8 @@ public class DrawCanvas {
         paint.setTypeface(ResourcesCompat.getFont(context, R.font.font_1));
         setUpMusic();
         vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+
+        animateSymbols();
     }
 
     void drawBackground(){
@@ -145,10 +149,10 @@ public class DrawCanvas {
         Bitmap image = Entity.images.get("enemy");
         int sprite_width  = image.getWidth()/21;
         int sprite_height = image.getHeight()/21;
-        int scalar = 6;
+        float scalar = symbol_scale;
         canvas.save();
         canvas.translate(
-                canvas.getWidth() /2f - (sprite_width  * scalar)/2f
+                canvas.getWidth()/2f - (sprite_width  * scalar)/2f
                 ,(canvas.getHeight()/4f * 1) - ((sprite_height * scalar)/2f)
         );
         canvas.scale(scalar, scalar);
@@ -171,7 +175,7 @@ public class DrawCanvas {
         Bitmap image = Entity.images.get("player");
         int sprite_width  = image.getWidth()/21;
         int sprite_height = image.getHeight()/21;
-        int scalar = 6;
+        float scalar = symbol_scale;
         canvas.save();
         canvas.translate(
                 canvas.getWidth()/2f - (sprite_width  * scalar)/2f
@@ -195,6 +199,7 @@ public class DrawCanvas {
             gameplay_music.setLooping(true);
             gameplay_music.setPlaybackParams(gameplay_music.getPlaybackParams().setSpeed(0.75f));
             background_tasks();
+            timer_animate_symbol.cancel();
         }
 
         updateEnemies();
@@ -319,9 +324,6 @@ public class DrawCanvas {
                 , -_image.getHeight() + Player.y_per(cloud_hideLength)
                 , null);
         canvas.restore();
-
-
-
     }
 
     void grassAnimate(){
@@ -439,6 +441,24 @@ public class DrawCanvas {
     }
 
 
+    void animateSymbols(){
+        timer_animate_symbol.schedule(new TimerTask() {
+            boolean increasing;
+            public void run() {
+                if (symbol_scale > 7)  increasing = false;
+                if (symbol_scale < 6)  increasing = true;
+
+                Log.d(TAG, "run: " + symbol_scale);
+
+                symbol_scale = symbol_scale + (parametricBlend(0.075f) * (increasing ? 1 : -1));
+            }
+        }, 0, 4);
+    }
+
+
+    float parametricBlend(float t){
+        return (float) (Math.pow(t, 2) / (2.0f * (Math.pow(t, 2) - t) + 1.0f));
+    }
 
 }
 

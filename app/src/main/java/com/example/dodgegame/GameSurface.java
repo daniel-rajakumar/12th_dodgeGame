@@ -65,9 +65,6 @@ public class GameSurface extends SurfaceView implements Runnable {
             while (DrawCanvas.canvas.getHeight() == 0){
             }
             DrawCanvas.team_one = motionEvent.getY() < DrawCanvas.canvas.getHeight()/2f;
-//            Log.d(TAG, "from_startScreen_to_gameScreen: " + String.format("(mouse.y: %s, (canvas.height): %s" + motionEvent.getY(), (DrawCanvas.canvas.getHeight()/2)));
-//            Log.d(TAG, "from_startScreen_to_gameScreen: " + isTop + " = " + String.format("(w: %s, h: %s)", DrawCanvas.canvas.getWidth(), DrawCanvas.canvas.getHeight()));
-//            Log.d(TAG, "from_startScreen_to_gameScreen: " + isTop + " = " + String.format("(%s, %s)", motionEvent.getX(), motionEvent.getY()));
             Entity.loadDynamicImage(this.getContext());
             DrawCanvas.player = new Player(this.getContext(), DrawCanvas.canvas);
             DrawCanvas.vibrator.vibrate(VibrationEffect.createOneShot(1000, VibrationEffect.DEFAULT_AMPLITUDE));
