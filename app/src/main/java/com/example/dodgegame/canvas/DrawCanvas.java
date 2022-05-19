@@ -141,6 +141,25 @@ public class DrawCanvas {
         paint.setColor(Color.RED);
         canvas.drawRect(new Rect(0, 0, canvas.getWidth(), canvas.getHeight()/2)
                 , paint);
+
+        Bitmap image = Entity.images.get("enemy");
+        int sprite_width  = image.getWidth()/21;
+        int sprite_height = image.getHeight()/21;
+        int scalar = 6;
+        canvas.save();
+        canvas.translate(
+                canvas.getWidth() /2f - (sprite_width  * scalar)/2f
+                ,(canvas.getHeight()/4f * 1) - ((sprite_height * scalar)/2f)
+        );
+        canvas.scale(scalar, scalar);
+        canvas.drawBitmap(
+                Bitmap.createBitmap(image
+                        , sprite_width/4
+                        , sprite_height * 2
+                        , sprite_width
+                        , sprite_height
+                ), new Matrix(), null);
+        canvas.restore();
     }
 
     void drawBottom(){
@@ -148,6 +167,25 @@ public class DrawCanvas {
         canvas.drawRect(new Rect(0, canvas.getHeight()/2, canvas.getWidth(), canvas.getHeight())
                 , paint);
 
+
+        Bitmap image = Entity.images.get("player");
+        int sprite_width  = image.getWidth()/21;
+        int sprite_height = image.getHeight()/21;
+        int scalar = 6;
+        canvas.save();
+        canvas.translate(
+                canvas.getWidth()/2f - (sprite_width  * scalar)/2f
+                ,(canvas.getHeight()/4f * 3) - ((sprite_height * scalar)/2f)
+        );
+        canvas.scale(scalar, scalar);
+        canvas.drawBitmap(
+                Bitmap.createBitmap(image
+                        , sprite_width/4
+                        , sprite_height * 2
+                        , sprite_width
+                        , sprite_height
+                ), new Matrix(), null);
+        canvas.restore();
     }
 
     void showGamePlayScreen(){

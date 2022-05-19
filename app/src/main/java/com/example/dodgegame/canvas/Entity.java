@@ -87,16 +87,18 @@ abstract public class Entity {
         images.put("cloud",  BitmapFactory.decodeResource(context.getResources(), R.drawable.cloud));
         images.put("water_bg",  BitmapFactory.decodeResource(context.getResources(), R.drawable.water_bg));
         images.put("land_bg",  BitmapFactory.decodeResource(context.getResources(), R.drawable.land_bg));
+        images.put("player", BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_player));
+        images.put("enemy",  BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_enemy));
     }
 
     public static void loadDynamicImage(Context context){
         if (DrawCanvas.team_one){
-            images.put("player", BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_player));
-            images.put("enemy",  BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_enemy));
-            images.put("bullet",  BitmapFactory.decodeResource(context.getResources(), R.drawable.bullet));
-        } else {
             images.put("player", BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_enemy));
             images.put("enemy",  BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_player));
+            images.put("bullet",  BitmapFactory.decodeResource(context.getResources(), R.drawable.bullet));
+        } else {
+            images.put("player", BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_player));
+            images.put("enemy",  BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_enemy));
             images.put("bullet",  BitmapFactory.decodeResource(context.getResources(), R.drawable.bullet));
         }
     }
