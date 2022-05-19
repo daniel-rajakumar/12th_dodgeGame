@@ -4,9 +4,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.RadialGradient;
 import android.graphics.Rect;
+import android.graphics.Shader;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
 import android.util.Log;
@@ -130,6 +133,11 @@ public class DrawCanvas {
 
 
     void showStartScreen(){
+//        paint.setShader(new RadialGradient(200, 200, 200, 0xFFFFFFFF,0xFF000000, android.graphics.Shader.TileMode.CLAMP));
+        paint.setShader(new LinearGradient(0, canvas.getHeight()*0.33f, 0, canvas.getHeight()*0.80f, Color.RED, Color.BLUE, Shader.TileMode.CLAMP));
+        canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), paint);
+        paint.setShader(null);
+
         drawTop();
         drawBottom();
         Log.d(TAG, "showStartScreen: " + team_one);
@@ -142,9 +150,9 @@ public class DrawCanvas {
     }
 
     void drawTop(){
-        paint.setColor(Color.RED);
-        canvas.drawRect(new Rect(0, 0, canvas.getWidth(), canvas.getHeight()/2)
-                , paint);
+//        paint.setColor(Color.RED);
+//        canvas.drawRect(new Rect(0, 0, canvas.getWidth(), canvas.getHeight()/2)
+//                , paint);
 
         Bitmap image = Entity.images.get("enemy");
         int sprite_width  = image.getWidth()/21;
@@ -167,9 +175,9 @@ public class DrawCanvas {
     }
 
     void drawBottom(){
-        paint.setColor(Color.BLUE);
-        canvas.drawRect(new Rect(0, canvas.getHeight()/2, canvas.getWidth(), canvas.getHeight())
-                , paint);
+//        paint.setColor(Color.BLUE);
+//        canvas.drawRect(new Rect(0, canvas.getHeight()/2, canvas.getWidth(), canvas.getHeight())
+//                , paint);
 
 
         Bitmap image = Entity.images.get("player");
