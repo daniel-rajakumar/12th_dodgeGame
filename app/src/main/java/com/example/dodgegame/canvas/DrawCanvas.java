@@ -47,7 +47,7 @@ public class DrawCanvas {
     static float cloud_scalar = 0.3f;
     static float waterSize = 0.6f;
     int fontSize, original_fontSize = 100;
-    static int time, total_time = 15;
+    static int time, total_time = 45;
     public static boolean team_one;
     private float symbol_scale = 6;
 
@@ -353,7 +353,7 @@ public class DrawCanvas {
     }
 
     void updateScore(){
-        text = score + "\uD83E\uDDDF";
+        text = score + ((team_one) ? "\uD83E\uDDB8":"\uD83E\uDDDF");
         paint.setTextSize(original_fontSize);
         canvas.drawText(text
                 , Player.x_per(1.05) - (text.length() * fontSize)
@@ -386,9 +386,14 @@ public class DrawCanvas {
         timer_enemy.schedule(new TimerTask() {
             public void run() {
                 if (player == null || player.isWalking) return;
-                int width = player.entity_width/4;
-                int min = -width;
-                int max = canvas.getWidth() - (width * 3);
+                int width, min, max;
+
+                do {
+                    width = player.entity_width/4;
+                    min = -width;
+                    max = canvas.getWidth() - (width * 3);
+                } while (max < 0 || width < 0);
+
                 enemies.push(new Enemy(context, canvas, random(min, max),0));
             }
         }, 0, 1000);
