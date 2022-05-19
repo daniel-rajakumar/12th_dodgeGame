@@ -9,6 +9,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
+import android.view.MotionEvent;
 
 import com.example.dodgegame.R;
 
@@ -37,7 +38,8 @@ abstract public class Entity {
     float scalar;
 
     public Entity(Context context, Canvas canvas) {
-        this.canvas = canvas;
+//        Entity.canvas = canvas;
+        this.canvas = DrawCanvas.canvas;
         this.context = context;
         toRemove = false;
         performingAction = false;
@@ -81,13 +83,22 @@ abstract public class Entity {
 
     }
 
-    static void loadAllImages(Context context){
-        images.put("player", BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_player));
-        images.put("enemy",  BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_enemy));
-        images.put("bullet",  BitmapFactory.decodeResource(context.getResources(), R.drawable.bullet));
+    static void loadStartingImages(Context context){
         images.put("cloud",  BitmapFactory.decodeResource(context.getResources(), R.drawable.cloud));
         images.put("water_bg",  BitmapFactory.decodeResource(context.getResources(), R.drawable.water_bg));
         images.put("land_bg",  BitmapFactory.decodeResource(context.getResources(), R.drawable.land_bg));
+    }
+
+    public static void loadDynamicImage(Context context){
+        if (DrawCanvas.team_one){
+            images.put("player", BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_player));
+            images.put("enemy",  BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_enemy));
+            images.put("bullet",  BitmapFactory.decodeResource(context.getResources(), R.drawable.bullet));
+        } else {
+            images.put("player", BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_enemy));
+            images.put("enemy",  BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_player));
+            images.put("bullet",  BitmapFactory.decodeResource(context.getResources(), R.drawable.bullet));
+        }
     }
 
     void setLocation_byPixel(int x, int y){
@@ -179,12 +190,12 @@ abstract public class Entity {
         y += moveSpeed;
     }
 
-    int x_per(double percent){
-        return (int) (canvas.getWidth() * percent);
+    static int x_per(double percent){
+        return (int) (DrawCanvas.canvas.getWidth() * percent);
     }
 
-    int y_per(double percent){
-        return (int) (canvas.getHeight() * percent);
+    static int y_per(double percent){
+        return (int) (DrawCanvas.canvas.getHeight() * percent);
     }
 
 
@@ -245,4 +256,5 @@ abstract public class Entity {
     public boolean isDamaged() {
         return isDamaged;
     }
+
 }

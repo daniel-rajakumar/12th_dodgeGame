@@ -9,6 +9,7 @@ import android.hardware.SensorEventListener2;
 import android.hardware.SensorManager;
 import android.os.VibrationEffect;
 import android.util.Log;
+import android.view.MotionEvent;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -18,7 +19,7 @@ public class Player extends Entity implements SensorEventListener2 {
     int coolDownTime = 5;
     boolean isWalking = true;
 
-    Player(Context context, Canvas canvas){
+    public Player(Context context, Canvas canvas){
         super(context, canvas);
         setImage(Direction.TOP, 3f);
         setMoveSpeed(15);
@@ -118,19 +119,6 @@ public class Player extends Entity implements SensorEventListener2 {
 
     @Override
     public void fire() {
-        if (DrawCanvas.gameScene == GameScene.END
-        && !DrawCanvas.grassAnimation) {
-            DrawCanvas.resetGame(context, canvas);
-            DrawCanvas.vibrator.vibrate(VibrationEffect.createOneShot(1000, VibrationEffect.DEFAULT_AMPLITUDE));
-            return;
-        }
-
-        if (DrawCanvas.gameScene == GameScene.START){
-            DrawCanvas.gameScene = GameScene.GAME;
-            DrawCanvas.vibrator.vibrate(VibrationEffect.createOneShot(1000, VibrationEffect.DEFAULT_AMPLITUDE));
-            return;
-        }
-
         if (isPerformingAction() || isDamaged()) return;
         setPerformingAction(true);
         fireBullet();

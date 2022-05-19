@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener2;
+import android.os.VibrationEffect;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -12,6 +13,9 @@ import android.view.SurfaceView;
 import android.view.View;
 
 import com.example.dodgegame.canvas.DrawCanvas;
+import com.example.dodgegame.canvas.Entity;
+import com.example.dodgegame.canvas.GameScene;
+import com.example.dodgegame.canvas.Player;
 
 public class GameSurface extends SurfaceView implements Runnable {
 
@@ -20,6 +24,7 @@ public class GameSurface extends SurfaceView implements Runnable {
     Thread gameThread;
     volatile boolean running = false;
     DrawCanvas drawCanvas;
+    MotionEvent motionEvent;
 
     public GameSurface(Context context) {
         super(context);
@@ -29,11 +34,48 @@ public class GameSurface extends SurfaceView implements Runnable {
 
     void setUpTouch() {
         setOnTouchListener((view, motionEvent) -> {
+            this.motionEvent = motionEvent;
             performClick();
+
+            if (from_endScreen_to_gameScreen()) return false;
+            if (from_startScreen_to_gameScreen()) return false;
+
             DrawCanvas.player.fire();
+
+//            Log.d(TAG, "setUpTouch: (" + motionEvent.getX() + "," + motionEvent.getY() + ")");
+
             return false;
         });
     }
+
+    boolean from_endScreen_to_gameScreen(){
+        if (DrawCanvas.gameScene == GameScene.END
+                && !DrawCanvas.grassAnimation) {
+            DrawCanvas.resetGame(this.getContext(), DrawCanvas.canvas);
+            DrawCanvas.vibrator.vibrate(VibrationEffect.createOneShot(1000, VibrationEffect.DEFAULT_AMPLITUDE));
+            return true;
+        }
+        return false;
+    }
+
+    boolean from_startScreen_to_gameScreen(){
+        if (DrawCanvas.gameScene == GameScene.START){
+            DrawCanvas.gameScene = GameScene.GAME;
+            boolean isTop = true;
+            while (DrawCanvas.canvas.getHeight() == 0){
+            }
+            DrawCanvas.team_one = motionEvent.getY() < DrawCanvas.canvas.getHeight()/2f;
+//            Log.d(TAG, "from_startScreen_to_gameScreen: " + String.format("(mouse.y: %s, (canvas.height): %s" + motionEvent.getY(), (DrawCanvas.canvas.getHeight()/2)));
+//            Log.d(TAG, "from_startScreen_to_gameScreen: " + isTop + " = " + String.format("(w: %s, h: %s)", DrawCanvas.canvas.getWidth(), DrawCanvas.canvas.getHeight()));
+//            Log.d(TAG, "from_startScreen_to_gameScreen: " + isTop + " = " + String.format("(%s, %s)", motionEvent.getX(), motionEvent.getY()));
+            Entity.loadDynamicImage(this.getContext());
+            DrawCanvas.player = new Player(this.getContext(), DrawCanvas.canvas);
+            DrawCanvas.vibrator.vibrate(VibrationEffect.createOneShot(1000, VibrationEffect.DEFAULT_AMPLITUDE));
+            return true;
+        }
+        return false;
+    }
+
 
 
     @Override

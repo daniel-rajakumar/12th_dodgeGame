@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.os.VibrationEffect;
 import android.util.Log;
+import android.view.MotionEvent;
 
 import java.util.Timer;
 import java.util.TimerTask;
