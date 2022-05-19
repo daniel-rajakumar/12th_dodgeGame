@@ -19,7 +19,6 @@ import com.example.dodgegame.canvas.Player;
 
 public class GameSurface extends SurfaceView implements Runnable {
 
-    private static final String TAG = "test";
     SurfaceHolder surfaceHolder;
     Thread gameThread;
     volatile boolean running = false;
@@ -42,8 +41,6 @@ public class GameSurface extends SurfaceView implements Runnable {
 
             DrawCanvas.player.fire();
 
-//            Log.d(TAG, "setUpTouch: (" + motionEvent.getX() + "," + motionEvent.getY() + ")");
-
             return false;
         });
     }
@@ -61,9 +58,7 @@ public class GameSurface extends SurfaceView implements Runnable {
     boolean from_startScreen_to_gameScreen(){
         if (DrawCanvas.gameScene == GameScene.START){
             DrawCanvas.gameScene = GameScene.GAME;
-            boolean isTop = true;
-            while (DrawCanvas.canvas.getHeight() == 0){
-            }
+            while (DrawCanvas.canvas.getHeight() == 0);
             DrawCanvas.team_one = motionEvent.getY() < DrawCanvas.canvas.getHeight()/2f;
             Entity.loadDynamicImage(this.getContext());
             DrawCanvas.player = new Player(this.getContext(), DrawCanvas.canvas);

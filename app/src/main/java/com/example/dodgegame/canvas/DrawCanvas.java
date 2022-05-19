@@ -23,7 +23,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class DrawCanvas {
-    private static final String TAG = "test";
     public static Player player;
     static LinkedList<Enemy> enemies = new LinkedList<>();
     static LinkedList<Bullet> bullets = new LinkedList<>();
@@ -120,9 +119,7 @@ public class DrawCanvas {
     }
 
     void updateMusic(){
-        Log.d(TAG, "updateMusic: " + time + " = " + (total_time * 0.5));
-        if (time > 10 && (time) == Math.floor(total_time*0.5)){
-            Log.d(TAG, "updateMusic: " + "yes");
+        if (time > 10 && (time) == Math.floor(total_time * 0.5)){
             gameplay_music.setPlaybackParams(gameplay_music.getPlaybackParams().setSpeed(1f));
         }
 
@@ -133,27 +130,15 @@ public class DrawCanvas {
 
 
     void showStartScreen(){
-//        paint.setShader(new RadialGradient(200, 200, 200, 0xFFFFFFFF,0xFF000000, android.graphics.Shader.TileMode.CLAMP));
         paint.setShader(new LinearGradient(0, canvas.getHeight()*0.33f, 0, canvas.getHeight()*0.80f, Color.RED, Color.BLUE, Shader.TileMode.CLAMP));
         canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), paint);
         paint.setShader(null);
 
         drawTop();
         drawBottom();
-        Log.d(TAG, "showStartScreen: " + team_one);
-//        updateGrass();
-//        toggle_tapAnywhereText++;
-//
-//        if (!grassAnimation){
-//            updateScreenText();
-//        }
     }
 
     void drawTop(){
-//        paint.setColor(Color.RED);
-//        canvas.drawRect(new Rect(0, 0, canvas.getWidth(), canvas.getHeight()/2)
-//                , paint);
-
         Bitmap image = Entity.images.get("enemy");
         int sprite_width  = image.getWidth()/21;
         int sprite_height = image.getHeight()/21;
@@ -175,11 +160,6 @@ public class DrawCanvas {
     }
 
     void drawBottom(){
-//        paint.setColor(Color.BLUE);
-//        canvas.drawRect(new Rect(0, canvas.getHeight()/2, canvas.getWidth(), canvas.getHeight())
-//                , paint);
-
-
         Bitmap image = Entity.images.get("player");
         int sprite_width  = image.getWidth()/21;
         int sprite_height = image.getHeight()/21;
@@ -431,7 +411,7 @@ public class DrawCanvas {
 
 
     int random(int min, int max){
-        return (int) (Math. random()*(max-min+1))+min;
+        return (int) (Math.random() * (max - min + 1)) + min;
     }
 
     public static void resetGame(Context context, Canvas canvas){
@@ -460,8 +440,6 @@ public class DrawCanvas {
             public void run() {
                 if (symbol_scale > 7)  increasing = false;
                 if (symbol_scale < 6)  increasing = true;
-
-                Log.d(TAG, "run: " + symbol_scale);
 
                 symbol_scale = symbol_scale + (parametricBlend(0.075f) * (increasing ? 1 : -1));
             }
