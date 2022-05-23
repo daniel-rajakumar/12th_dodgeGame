@@ -95,11 +95,11 @@ abstract public class Entity {
         if (DrawCanvas.team_one){
             images.put("player", BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_enemy));
             images.put("enemy",  BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_player));
-            images.put("bullet",  BitmapFactory.decodeResource(context.getResources(), R.drawable.bullet));
+            images.put("bullet",  BitmapFactory.decodeResource(context.getResources(), R.drawable.bullet_1));
         } else {
             images.put("player", BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_player));
             images.put("enemy",  BitmapFactory.decodeResource(context.getResources(), R.drawable.sprite_enemy));
-            images.put("bullet",  BitmapFactory.decodeResource(context.getResources(), R.drawable.bullet));
+            images.put("bullet",  BitmapFactory.decodeResource(context.getResources(), R.drawable.bullet_2));
         }
     }
 

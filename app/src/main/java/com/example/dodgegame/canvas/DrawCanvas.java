@@ -341,7 +341,7 @@ public class DrawCanvas {
     }
 
     void updateScore(){
-        text = score + ((team_one) ? "\uD83E\uDDB8":"\uD83E\uDDDF");
+        text = score + ((!team_one) ? "\uD83D\uDC31":"\uD83D\uDC36");
         paint.setTextSize(original_fontSize);
         canvas.drawText(text
                 , Player.x_per(1.05) - (text.length() * fontSize)

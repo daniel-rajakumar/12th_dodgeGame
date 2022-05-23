@@ -18,7 +18,12 @@ public class Bullet extends Entity {
     @Override
     void move() {
         if (direction == Direction.TOP) moveTop();
-        increaseScale(0.0025f, 0.1f);
+        if (DrawCanvas.team_one)
+            increaseScale(0.005f, 0.3f);
+        else {
+            increaseScale(0.005f/3, 0.1f);
+        }
+
 
         setCollision(new Rect(
                 this.x,
