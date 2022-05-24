@@ -87,7 +87,7 @@ public class Enemy extends Entity {
     void dieAnimation(Enemy enemy){
         enemy.direction = Direction.NONE;
         enemy.sprite_x = 0;
-        enemy.sprite_x_max = enemy.inWater ? 2 : 5;
+        enemy.sprite_x_max = enemy.inWater ? 2 : 4;
         enemy.sprite_y = 20;
 
         new Timer().schedule(new TimerTask() {
